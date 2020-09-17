@@ -680,7 +680,7 @@ class LeaderboardViewSet(GMechanicViewSet):
                     elif queryset[0].sort_by == 'followers':
                         json[user.user.username] = len([x for x in Gamer.objects.all() if user.user.username in x.social_profile.data['friends']])
                     elif queryset[0].sort_by == 'views':
-                         json[user.user.username] = 0 # TO DO :: Add views count mechanism
+                         json[user.user.username] = user.social_profile.data['views'] # TO DO :: Add views count mechanism
         json = dict(sorted(json.items(), key=lambda x: x[1], reverse=True)[:queryset[0].length])
         queryset.update(leadders = json)
 
