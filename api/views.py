@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from api.serializers import AdaptativeSerializer, InteractionStatisticSerializer, BadgeSerializer, ChallengeSerializer, DevelopmentToolSerializer, EasterEggSerializer, KnowledgeGiftSerializer, KnowledgeShareSerializer, LevelSerializer, LotterySerializer, PointSerializer, SocialNetworkSerializer, SocialStatusSerializer, UnlockableSerializer, LeaderboardSerializer, UserSerializer, GroupSerializer, GamerSerializer, GMechanicSerializer, GComponentSerializer , GamerProfileSerializer, EmotionProfileSerializer, SocialProfileSerializer
+from api.serializers import AdaptativeSerializer, InteractionStatisticSerializer, BadgeSerializer, ChallengeSerializer, DevelopmentToolSerializer, EasterEggSerializer, GiftSerializer, GiftOpenerSerializer, KnowledgeShareSerializer, LevelSerializer, LotterySerializer, PointSerializer, SocialNetworkSerializer, SocialStatusSerializer, UnlockableSerializer, LeaderboardSerializer, UserSerializer, GroupSerializer, GamerSerializer, GMechanicSerializer, GComponentSerializer , GamerProfileSerializer, EmotionProfileSerializer, SocialProfileSerializer
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, Http404
-from api.models import mechanics_list, mechanics_list_names, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, KnowledgeGift, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GMechanic, GComponent, GamerProfile, EmotionProfile, SocialProfile
+from api.models import mechanics_list, mechanics_list_names, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GMechanic, GComponent, GamerProfile, EmotionProfile, SocialProfile
 from django.template.response import TemplateResponse
 from rest_framework.response import Response
 import numpy as np
@@ -15,7 +15,43 @@ import threading
 lock = threading.Lock()
 lock2 = threading.Lock()
 lock3 = threading.Lock()
+lock4 = threading.Lock()
+lock5 = threading.Lock()
 
+def open_gift(request,username):
+
+    lock5.acquire()
+    message = ""
+    text = "false" 
+    user = Gamer.objects.filter(user__username = username)[0]
+    if 'index' in request.GET.keys():
+        if user.gamer_profile.data['gifts'][int(request.GET['index'])][1] == 'text':
+            text = "true"
+            message = "The user " + user.gamer_profile.data['gifts'][int(request.GET['index'])][0] + " send you the following message: " +  user.gamer_profile.data['gifts'][int(request.GET['index'])][2]
+        else:
+            user.gamer_profile.data[user.gamer_profile.data['gifts'][int(request.GET['index'])][1]] += int(user.gamer_profile.data['gifts'][int(request.GET['index'])][2])
+            what = "$"
+            if(user.gamer_profile.data['gifts'][int(request.GET['index'])][1] == 'score'):
+                what = "points"    
+            message = "You have recieved " + user.gamer_profile.data['gifts'][int(request.GET['index'])][2] + " " + what + " from " + user.gamer_profile.data['gifts'][int(request.GET['index'])][0] + "!"
+        del user.gamer_profile.data['gifts'][int(request.GET['index'])] 
+        user.gamer_profile.save()
+    lock5.release()
+    return JsonResponse({'results': 'OK', 'message':message})
+
+def add_gift(request,username):
+
+    lock4.acquire()
+    print("Adding gift to",username)
+    user = Gamer.objects.filter(user__username = username)[0]
+    if 'from' in request.GET.keys():
+        if 'type' in request.GET.keys():
+            if "content" in request.GET.keys():
+                user.gamer_profile.data['gifts'] += [[request.GET['from'],request.GET['type'], request.GET['content']]]
+                user.gamer_profile.save()
+    lock4.release()
+    print(len(user.gamer_profile.data['gifts']))
+    return JsonResponse({'results': 'OK'})
 
 def add_friend(request,username,friend_username):
 
@@ -107,7 +143,7 @@ def preview_gmechanic(request, gmechanic_id):
 #     return TemplateResponse(request, 'badge_icon_preview.html', {"filename":filename})
 
 def view_badge_set(request, username):
-    print("Worked")
+  
     try:
         user = Gamer.objects.filter(user__username = username)[0]
     except:
@@ -128,7 +164,7 @@ def view_badge_set(request, username):
 
 
 def view_unlockable_set(request, username):
-    print("Worked")
+   
     try:
         user = Gamer.objects.filter(user__username = username)[0]
     except:
@@ -148,7 +184,7 @@ def view_unlockable_set(request, username):
     return JsonResponse({'results':unlocks_set})
 
 def view_challenge_set(request, username):
-    print("Worked")
+   
     try:
         user = Gamer.objects.filter(user__username = username)[0]
     except:
@@ -327,7 +363,7 @@ class GMechanicViewSet(viewsets.ModelViewSet):
 
             tmp_title = queryset[0].title
             if 'show_title' in request.GET.keys():
-                print("Halooo", request.GET['show_title'])
+                #print("Halooo", request.GET['show_title'])
                 st = request.GET['show_title']
                 if st == 'false':
                     queryset.update(title = "")
@@ -388,7 +424,7 @@ class ChallengeViewSet(GMechanicViewSet):
 
     def logic(self,queryset,request):
         #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
-        print("Im hereee")
+        #print("Im hereee")
         if 'user' in request.GET.keys():
             if request.GET['user']:
                 user = Gamer.objects.filter(user__username = request.GET['user'])
@@ -406,8 +442,8 @@ class ChallengeViewSet(GMechanicViewSet):
                                 user.gamer_profile.data['challenges'] = [queryset[0].id]
                             user.gamer_profile.save()
                             queryset.update(state = True)
-                            print("Im entering hereee")
-                            print(queryset[0].state)
+                            #print("Im entering hereee")
+                            #print(queryset[0].state)
                         else:
                            queryset.update(state = False)
                     else:
@@ -444,7 +480,7 @@ class UnlockableViewSet(GMechanicViewSet):
 
     def logic(self,queryset,request):
         #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
-        print("Im hereee")
+        #print("Im hereee")
         if 'user' in request.GET.keys():
             if request.GET['user']:
                 user = Gamer.objects.filter(user__username = request.GET['user'])
@@ -462,8 +498,8 @@ class UnlockableViewSet(GMechanicViewSet):
                                 user.gamer_profile.data['unlockables'] = [queryset[0].id]
                             user.gamer_profile.save()
                             queryset.update(state = True)
-                            print("Im entering hereee")
-                            print(queryset[0].state)
+                            #print("Im entering hereee")
+                            #print(queryset[0].state)
                         else:
                            queryset.update(state = False)
                     else:
@@ -491,7 +527,7 @@ class BadgeViewSet(GMechanicViewSet):
 
     def logic(self,queryset,request):
         #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
-        print("Im hereee")
+        #print("Im hereee")
         if 'user' in request.GET.keys():
             if request.GET['user']:
                 user = Gamer.objects.filter(user__username = request.GET['user'])
@@ -509,8 +545,8 @@ class BadgeViewSet(GMechanicViewSet):
                                 user.gamer_profile.data['badges'] = [queryset[0].id]
                             user.gamer_profile.save()
                             queryset.update(state = True)
-                            print("Im entering hereee")
-                            print(queryset[0].state)
+                            #print("Im entering hereee")
+                            #print(queryset[0].state)
                         else:
                            queryset.update(state = False)
                     else:
@@ -710,12 +746,57 @@ class SocialStatusViewSet(GMechanicViewSet):
     concrete_class = 'social_statuses'
     concrete_model = SocialStatus
 
-class KnowledgeShareViewSet(viewsets.ModelViewSet):
+class KnowledgeShareViewSet(GMechanicViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
     queryset = KnowledgeShare.objects.all()
     serializer_class = KnowledgeShareSerializer
+    concrete_class = 'knowledge_shares'
+    concrete_model = KnowledgeShare
+
+
+    def retrieve(self, request, pk=None):
+        return super().abstract_retrieve(request,pk)
+
+    # Concrete logic for leaderboards view
+    def logic(self,queryset,request):
+        if not queryset[0].messages:
+            queryset.update(messages = {})
+        if 'from' in request.GET.keys():
+            if 'message' in request.GET.keys():
+                old_messages = queryset[0].messages
+                if 'length' in old_messages.keys():
+                    old_messages['content'] += [[request.GET['from'],request.GET['message']]]
+                    old_messages['length'] += 1
+                else:
+                    old_messages['length'] = 1
+                    old_messages['content'] = [[request.GET['from'],request.GET['message']]]
+                queryset.update(messages = old_messages)
+                
+
+
+
+class GiftViewSet(GMechanicViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Gift.objects.all()
+    serializer_class = GiftSerializer
+    concrete_class = 'gifts'
+    concrete_model = Gift
+
+
+class GiftOpenerViewSet(GMechanicViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = GiftOpener.objects.all()
+    serializer_class = GiftOpenerSerializer
+    concrete_class = 'gift_openers'
+    concrete_model = GiftOpener
+
+# Adaptative mechanics
 
 class AdaptativeViewSet(GMechanicViewSet):
     """
@@ -799,9 +880,3 @@ class AdaptativeUtilitiesViewSet(AdaptativeViewSet):
 
 
 
-class KnowledgeGiftViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = KnowledgeGift.objects.all()
-    serializer_class = KnowledgeGiftSerializer

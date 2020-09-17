@@ -1,0 +1,310 @@
+<style>
+.item1 { grid-area: header; }
+.users { grid-area: users; }
+.label1 {grid-area: label1; text-align:center;}
+.label2 {grid-area: label2;text-align:center;}
+.item2 { grid-area: menu; }
+.item3 {grid-area: item3; text-align:left;}
+.void { grid-area: void; }
+.item5 { grid-area: footer; padding-left:40px;width:100%;}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'item3 item3 item3 users users users '
+    'label1 header header users users users'
+    'label2 menu menu users users users'
+    'label2 menu menu users users users'
+    'label2 menu menu users users users'
+    'label2 menu menu users users users'
+    'footer footer footer users users users'
+    'footer footer footer users users users'
+    'footer footer footer users users users';
+    
+    
+  grid-gap: 5px;
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size:1.5rem;
+  
+  background-color: none;/*blue*/
+}
+
+.gift-textarea{
+	resize:none;
+	width: 90%;
+    
+    height: 145px;
+}
+
+#scrollable-content {
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 300px;
+  overflow: auto;
+  background-color: white;
+  margin:10px;
+}
+
+  input.largeCheckbox { 
+            width: 22px; 
+            height: 22px; 
+            float:left;
+            text-align:left;
+  } 
+  
+.block-submit {
+  display: block;
+  width: 100%;
+
+  padding: 14px 28px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+</style>
+
+<param id="usernames" value="">
+
+<!-- The Profile Modal -->
+<div id="myGiftsModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content" style = " width: 50%;">
+ 
+    <div class="modal-header">
+        <div class="container-fluid">
+          <!-- Control the column width, and how they should appear on different devices -->
+          
+            <div><span class="close" id="close-mygifts">&times;</span></div>
+            <h3>My Gifts</h3>
+        </div>     
+    </div>
+    <div class="modal-body" style="text-align:center;" id="mygifts-body-incr">
+      Body
+    </div>
+  </div>
+</div>
+
+
+<div style="text-align:center">
+  <h2 id = "header-gift"></h2>     
+</div>
+
+<div class="container-fluid"  style="width:100%;">
+  <div class="grid-container">
+    <div id="gift-elements"></div>
+    <div class="label1" id="label1"></div>
+    <div class="item1" id="item1"></div>
+    <div class="label2" id="label2"></div>
+    <div class="item2" id="gift-input"></div>
+    <div class="item3" id="item3"></div>
+    <div class="users">
+      <div style="text-align:center;" id="label3"></div>
+      <div id="scrollable-users"></div>
+    </div>
+    <div class="item5" id="item5"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById("item3").innerHTML = '<a href="#" onclick="openMyGifts()"><img src="https://img.icons8.com/bubbles/2x/gift.png" style="width:50px; height:50px;">&nbsp; My Gifts <br><br></a>';
+document.getElementById("label1").innerHTML = '<label for="gift-options">Type of gift: &nbsp; </label>';
+document.getElementById("item1").innerHTML = '<select name="gift-options" id="gift-options" style="width:93%; font-size:15px;" onchange="updateInput()">'+
+                                                '<option value="score" style=" ">Points</option>'+
+                                                '<option value="$">$</option>'+
+                                                '<option value="text">Text</option>'+
+                                              '</select>';
+document.getElementById("label2").innerHTML = '<label for="gift-input-instance" id="gift-input-instance-label">Amount: &nbsp; </label>';
+document.getElementById("gift-input").innerHTML = '<input id="gift-input-instance" type="number" value="10" style="width:93%; text-align:center;">';
+document.getElementById("label3").innerHTML = '<b>Send gift to: </b>';
+document.getElementById("scrollable-users").innerHTML = ' <div id="scrollable-content" style="border-style:groove; border-width:1px;"><div style="border-x:groove; border-width:1px;margin:10px;">'+
+                                                '<input type="checkbox" id="select-all" class="largeCheckbox" name="vehicle1" value="Bike" style="" onclick="selectAll(this);">'+
+                                                '<div style="font-size:1.5rem; text-align:center;">All users</div>'+
+                                                  '<hr>'+
+                                              '</div></div>';
+document.getElementById("item5").innerHTML = '<button class="block-submit" onclick="sendGifts()">Send Gifts</button>';
+</script>
+
+<script>
+        fetch("http://127.0.0.1:8080/api/g_mechanics/20/?user=dynamic_user&show_title=false")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (myJson) {
+                document.querySelector("#mygifts-body-incr").innerHTML = (myJson.html);
+                $(myJson.html).appendTo(document.body);    
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    </script>
+
+<script>
+function openMyGifts(){
+  var modal = document.getElementById("myGiftsModal");
+            // Get the <span> element that closes the modal
+  var span = document.getElementById("close-mygifts");
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  modal.style.display = "block";
+}
+
+function updateInput() {
+  var x = document.getElementById("gift-options").value;
+  if(x == "score" || x == "$"){
+       document.getElementById("gift-input-instance-label").innerHTML = "Amount: &nbsp; ";
+       document.getElementById("gift-input").innerHTML = '<input id="gift-input-instance" type="number" value="10" style="width:93%; text-align:center;">';
+       
+  }else{
+       document.getElementById("gift-input-instance-label").innerHTML = "Text: &nbsp; ";
+       document.getElementById("gift-input").innerHTML = '<textarea class="gift-textarea" id="gift-input-instance" placeholder="Hi! That\'s my text-like gift!"></textarea>';
+  }
+}
+
+function selectAll(cb){
+  usernames = JSON.parse(document.getElementById("usernames").value);
+  usernames.forEach(function(item,index){
+    document.getElementById("checkbox-" + item).checked = cb.checked;
+  });
+}
+
+
+function sendGift(to){
+    //alert(to);
+    var type = document.getElementById("gift-options").value;
+    var content = document.getElementById("gift-input-instance").value;
+    
+    fetch("http://127.0.0.1:8080/api/gamers/" + to + "/add_gift?from=dynamic_user&type=" + type + "&content=" + content) 
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            //alert("answer from" + to);
+             
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+}
+
+function sendGifts(){
+  var count = 0;
+   usernames = JSON.parse(document.getElementById("usernames").value);
+   usernames.forEach(function(item,index){
+     ucb = document.getElementById("checkbox-" + item);
+     if(ucb.checked){
+       sendGift(item);
+       count++;
+     }
+   });
+
+
+  if(count == 0){
+    alert("You haven't selected any user!");
+  }else if(count == 1){
+    alert("You have sent a gift!");
+  }else if(count > 1){
+    alert("You have sent a gift to every selected user!");
+  }
+   
+ 
+}
+
+</script>
+
+<script>
+    fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechanic url
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            document.querySelector("#header-gift").innerHTML = myJson.title;
+            //document.querySelector("#score").innerHTML = "Your " + myJson.given_by + " is " + myJson.score ;
+            //document.querySelector("#uname").innerHTML = "Username: " + myJson.user ;
+             
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+
+    fetch("http://127.0.0.1:8080/api/gamers/") // WARNING: should be replaced by a concrete mechanic url
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            myJson = myJson.results;
+            var usernames = []
+            for(var i = 0; i < myJson.length; i++){
+              if(myJson[i].user.username != "dynamic_user"){
+                usernames.push('"' + myJson[i].user.username + '"');
+                document.getElementById("scrollable-content").innerHTML +=  '<div style="border-x:groove; border-width:1px;margin:10px;">'+
+                                                                            '<input type="checkbox" id="checkbox-' + myJson[i].user.username  + '" class="largeCheckbox" name="' + myJson[i].user.username  + '" value="'+ myJson[i].user.username  + '">'+
+                                                                            '<div style="font-size:1.2rem; text-align:center;">' + myJson[i].user.username  + '</div>'+
+                                                                          '</div>';
+              }
+            }
+            document.getElementById("usernames").value = "["  + usernames  + "]";
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+</script> 
+
+
+      

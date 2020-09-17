@@ -1,0 +1,93 @@
+<style>
+.scrollable-content {
+ 
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 300px;
+  overflow: auto;
+  background-color: white;
+  margin:10px; 
+}
+
+</style>
+
+<param id="num-gifts" value=0>
+<param id="current-num-gifts" value=0>
+<div style="text-align:center">
+  <h2 id = "header-gift-opener"></h2>     
+</div>
+
+
+<div class="scrollable-content" id = "gifts-content"></div>
+
+<script>
+
+function openGift(gift){
+   
+    fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/open_gift?index=" + gift.value) // WARNING: should be replaced by a concrete mechanic url
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            if(myJson.results == 'OK'){
+                gift.innerHTML = "Opened!"
+                gift.disabled = true;
+                for(var i = 0; i < document.getElementById("num-gifts").value; i++){
+                    var g = document.getElementById("open-button-" + i);
+                    if(g.value != "-"){
+                        if(g.value > gift.value){
+                            //alert("Before: " + g.value);
+                            g.value--;
+                            //alert("After: " + g.value);
+                        }
+                    }
+                }
+                gift.value = "-";
+                alert(myJson.message);
+            }
+             
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+}
+</script>
+
+<script>
+
+    fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechanic url
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            document.querySelector("#header-gift-opener").innerHTML = myJson.title;
+             
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+
+    fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/") // WARNING: should be replaced by a concrete mechanic url
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            
+            var gifts = myJson.gamer_profile.data.gifts;
+         
+            document.getElementById("num-gifts").value = gifts.length;
+            gifts.forEach(function(item,index){
+                document.querySelector("#gifts-content").innerHTML += '<h3><div class="row" style="background:whitesmoke; margin:10px;">'+
+                                                                        '<div class="col-md-4"><img style="width:60px;height:60px;" src="https://img.icons8.com/bubbles/2x/gift.png" ></div>'+
+                                                                        '<div class="col-md-4" style="margin-top:15px;">Gift from ' + item[0] + '</div>'+
+                                                                        '<div class="col-md-4" style="text-align:right;"><button style="margin-top:10px;" name="' + item[0] + '" value="' + index + '" onclick="openGift(this)" id="open-button-' + index + '"> Open </button> </div>'+
+                                                                      '</div></h3>';
+            });             
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
+</script> 
+
+
+      

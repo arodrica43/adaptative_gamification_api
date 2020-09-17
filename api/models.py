@@ -108,8 +108,8 @@ def unique_individual_group(value):
 
 class Gamer(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
-    emotion_profile = models.ForeignKey(EmotionProfile, on_delete=models.CASCADE)
-    gamer_profile =  models.ForeignKey(GamerProfile, on_delete=models.CASCADE)
+    emotion_profile = models.OneToOneField(EmotionProfile, on_delete=models.CASCADE)
+    gamer_profile =  models.OneToOneField(GamerProfile, on_delete=models.CASCADE)
     social_profile =  models.OneToOneField(SocialProfile, on_delete=models.CASCADE)
 
 class GMechanic(models.Model):
@@ -322,21 +322,25 @@ class KnowledgeShare(GMechanic):
         super().__init__(*args, **kwargs)
         self.mechanic_type = GMechanic.MechanicType.Purpose
             # self.fields.pop('parent') # or remove the field
-    users = models.ManyToManyField(Gamer)
-    length = models.IntegerField(validators=[MinValueValidator(0)],default = 0)
-    sort_by = models.CharField(max_length=100,default = '')
+    messages = JSONField(default = dict)
 
-class KnowledgeGift(GMechanic):
+class Gift(GMechanic):
 
     def __init__(self, *args, **kwargs):
         """If object is being updated don't allow contact to be changed."""
         super().__init__(*args, **kwargs)
         self.mechanic_type = GMechanic.MechanicType.Purpose
             # self.fields.pop('parent') # or remove the field
-    users = models.ManyToManyField(Gamer)
-    length = models.IntegerField(validators=[MinValueValidator(0)],default = 0)
-    sort_by = models.CharField(max_length=100,default = '')
+    
 
+class GiftOpener(GMechanic):
+
+    def __init__(self, *args, **kwargs):
+        """If object is being updated don't allow contact to be changed."""
+        super().__init__(*args, **kwargs)
+        self.mechanic_type = GMechanic.MechanicType.Reward
+            # self.fields.pop('parent') # or remove the field
+ 
 
 class Adaptative(GMechanic):
 
@@ -371,6 +375,6 @@ class GComponent(models.Model):
     #             result[gm.mechanic_type] += 1
     #     return result
             
-mechanics_list = [Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, KnowledgeGift, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard]
-mechanics_list_names = ['adaptatives','badges', 'challenges', 'development_tools', 'easter_eggs', 'knowledge_gifts', 'knowledge_shares', 'levels', 'lotteries', 'points', 'social_networks', 'social_statuses', 'unlockables', 'leaderboards']
+mechanics_list = [Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard]
+mechanics_list_names = ['adaptatives','badges', 'challenges', 'development_tools', 'easter_eggs', 'gifts', 'gift_openers', 'knowledge_shares', 'levels', 'lotteries', 'points', 'social_networks', 'social_statuses', 'unlockables', 'leaderboards']
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 from . import models, fields
-from api.models import unique_individual_group, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, KnowledgeGift, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GComponent, GMechanic, GamerProfile, EmotionProfile, SocialProfile
+from api.models import unique_individual_group, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GComponent, GMechanic, GamerProfile, EmotionProfile, SocialProfile
 from rest_framework.response import Response
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db.utils import IntegrityError
@@ -67,7 +67,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         
         #user.set_password(validated_data.get('username'))
         user.save()
-        print(validated_data)
+        #print(validated_data)
         gamer_profile_data = validated_data.pop('gamer_profile')
         emotion_profile_data = validated_data.pop('emotion_profile')
         social_profile_data = validated_data.pop('social_profile')
@@ -89,10 +89,10 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         if 'data' in gamer_profile_data.keys(): 
             if gamer_profile_data['data']:
                 data_data = gamer_profile_data['data']
-            else: data_data = {"level":0,"score":0,"$":0,"badges":[],"unlockables":[],"challenges":[]}
-        else: data_data = {"level":0,"score":0,"$":0,"badges":[],"unlockables":[],"challenges":[]}
+            else: data_data = {"level":0,"score":0,"$":0,"badges":[],"unlockables":[],"challenges":[], "gifts" : []}
+        else: data_data = {"level":0,"score":0,"$":0,"badges":[],"unlockables":[],"challenges":[], "gifts" : []}
         
-        gprofile, created_gprofile = GamerProfile.objects.update_or_create(disruptor = disruptor_data,
+        gprofile = GamerProfile.objects.create(disruptor = disruptor_data,
                                                                         free_spirit =  free_spirit_data,
                                                                         achiever =  achiever_data,
                                                                         player =  player_data,
@@ -106,7 +106,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         if 'arousal' in emotion_profile_data.keys(): arousal_data = emotion_profile_data['arousal']
         else: arousal_data = 1
         
-        eprofile, created_eprofile = EmotionProfile.objects.update_or_create(valence = valence_data,
+        eprofile = EmotionProfile.objects.create(valence = valence_data,
                                                                             arousal =  arousal_data)
 
 
@@ -116,7 +116,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
             image_data = "diamond"
         sprofile = SocialProfile.objects.create(image = image_data,data = {"friends":[],"followers":0, "views":0})
         
-        gamer, created = Gamer.objects.update_or_create(user = user, 
+        gamer = Gamer.objects.create(user = user, 
                                                         emotion_profile = eprofile,
                                                         gamer_profile = gprofile,
                                                         social_profile = sprofile
@@ -159,37 +159,43 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         else: no_player_data = instance.gamer_profile.no_player
         if 'data' in gamer_profile_data.keys(): data_data = gamer_profile_data['data']
         else: data_data = instance.gamer_profile.data 
-        gprofile, created_gprofile = GamerProfile.objects.update_or_create(disruptor = disruptor_data,
-                                                                        free_spirit =  free_spirit_data,
-                                                                        achiever =  achiever_data,
-                                                                        player =  player_data,
-                                                                        socializer =  socializer_data,
-                                                                        philantropist =  philantropist_data,
-                                                                        no_player =  no_player_data,
-                                                                        data = data_data)
+
+        # The following code add an attribute to gamer_profile.data when a created user updates its profile. Use it carefully!
+        # Can be used in a similar fashion to update social_profile.data
+        # if 'gifts' not in data_data.keys():
+        #     data_data['gifts'] = []
+
+        instance.gamer_profile.disruptor = disruptor_data
+        instance.gamer_profile.free_spirit = free_spirit_data
+        instance.gamer_profile.achiever = achiever_data
+        instance.gamer_profile.player = player_data
+        instance.gamer_profile.socializer = socializer_data
+        instance.gamer_profile.philantropist = philantropist_data
+        instance.gamer_profile.no_player = no_player_data
+        instance.gamer_profile.data = data_data
+        instance.gamer_profile.save()  
 
         if 'valence' in emotion_profile_data.keys(): valence_data = emotion_profile_data['valence']
         else: valence_data = instance.emotion_profile.valence
         if 'arousal' in emotion_profile_data.keys(): arousal_data = emotion_profile_data['arousal']
         else: arousal_data = instance.emotion_profile.arousal
-        eprofile, created_eprofile = EmotionProfile.objects.update_or_create(valence = valence_data,
-                                                                            arousal =  arousal_data)
-
-
+        
+        instance.emotion_profile.valence = valence_data
+        instance.emotion_profile.arousal = arousal_data
+        instance.emotion_profile.save()
 
         if 'image' in social_profile_data.keys(): image_data = social_profile_data['image']
         else: image_data = instance.social_profile.image
         if 'description' in social_profile_data.keys(): description_data = social_profile_data['description']
         else: description_data = instance.social_profile.description
+        if 'data' in social_profile_data.keys(): data_data = social_profile_data['data']
+        else: data_data = instance.social_profile.data
 
         instance.social_profile.description = description_data
         instance.social_profile.image = image_data
-        
+        instance.social_profile.data = data_data
         instance.social_profile.save()  
     
-
-        instance.gamer_profile = gprofile
-        instance.emotion_profile = eprofile
         instance.save()
         return instance
 
@@ -315,16 +321,22 @@ class SocialStatusSerializer(GMechanicSerializer):
         fields = GMechanicSerializer.Meta.fields[:3] + ['competitiveness'] +  GMechanicSerializer.Meta.fields[3:]
    
 class KnowledgeShareSerializer(GMechanicSerializer):
-    #mechanic_type = fields.EnumField(enum=models.GMechanic.MechanicType, read_only = True)
+    messages = fields.JSONSerializerField()
     class Meta(GMechanicSerializer.Meta):
         model = KnowledgeShare
-        fields = GMechanicSerializer.Meta.fields[:3] + ['length','users','sort_by'] +  GMechanicSerializer.Meta.fields[3:]
+        fields = GMechanicSerializer.Meta.fields[:3] + ['messages'] +  GMechanicSerializer.Meta.fields[3:]
    
-class KnowledgeGiftSerializer(GMechanicSerializer):
+class GiftSerializer(GMechanicSerializer):
     #mechanic_type = fields.EnumField(enum=models.GMechanic.MechanicType, read_only = True)
     class Meta(GMechanicSerializer.Meta):
-        model = KnowledgeGift
-        fields = GMechanicSerializer.Meta.fields[:3] + ['length','users','sort_by'] +  GMechanicSerializer.Meta.fields[3:]
+        model = Gift
+        fields = GMechanicSerializer.Meta.fields[:3] + [] +  GMechanicSerializer.Meta.fields[3:]
+
+class GiftOpenerSerializer(GMechanicSerializer):
+    #mechanic_type = fields.EnumField(enum=models.GMechanic.MechanicType, read_only = True)
+    class Meta(GMechanicSerializer.Meta):
+        model = GiftOpener
+        fields = GMechanicSerializer.Meta.fields[:3] + [] +  GMechanicSerializer.Meta.fields[3:]
 
 class AdaptativeSerializer(GMechanicSerializer):
     #mechanic_type = fields.EnumField(enum=models.GMechanic.MechanicType, read_only = True)

@@ -128,7 +128,7 @@
                                                                     '<button class="mytablinks" onclick="openTab(event, \'TopScore\')" id="defaultOpen" style="width:16.666%; height:100px; ">Top Scores</button>'+
                                                                     '<button class="mytablinks" onclick="openTab(event, \'TopLevel\')" style="width:16.666%;height:100px; ">Top Levels</button>'+
                                                                     '<button class="mytablinks" onclick="openTab(event, \'TopCoin\')" style="width:16.666%;height:100px; ">Top $</button>';
-            fetch("http://127.0.0.1:8080/api/g_mechanics/109/?user=dynaimic_user&show_title=false&dynamic_index=friendly")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/14/?user=dynaimic_user&show_title=false&dynamic_index=friendly")
                 .then(function (response) {
                     return response.json();
                 })
@@ -145,7 +145,7 @@
     <div id="TopFollowed" class="mytabcontent" style="text-align:center;width:100%;">
         <div class="scrollable-content"><div id="incr-top-followed"></div></div>
         <script>
-            fetch("http://127.0.0.1:8080/api/g_mechanics/110/?user=dynaimic_user&show_title=false&dynamic_index=followed")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/15/?user=dynaimic_user&show_title=false&dynamic_index=followed")
                 .then(function (response) {
                     return response.json();
                 })
@@ -162,7 +162,7 @@
     <div id="TopViews" class="mytabcontent" style="text-align:center;width:100%;">
         <div class="scrollable-content"><div id="incr-top-views"></div></div>
         <script>
-            fetch("http://127.0.0.1:8080/api/g_mechanics/111/?user=dynaimic_user&show_title=false&dynamic_index=views")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/16/?user=dynaimic_user&show_title=false&dynamic_index=views")
                 .then(function (response) {
                     return response.json();
                 })
@@ -178,7 +178,7 @@
     <div id="TopScore" class="mytabcontent" style="text-align:center;width:100%;">
         <div class="scrollable-content"><div id="incr-top-score"></div></div>
         <script>
-            fetch("http://127.0.0.1:8080/api/g_mechanics/106/?user=dynaimic_user&show_title=false&dynamic_index=score")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/11/?user=dynaimic_user&show_title=false&dynamic_index=score")
                 .then(function (response) {
                     return response.json();
                 })
@@ -194,7 +194,7 @@
     <div id="TopLevel" class="mytabcontent" style="text-align:center;width:100%;">
         <div class="scrollable-content"><div id="incr-top-level"></div></div>
         <script>
-            fetch("http://127.0.0.1:8080/api/g_mechanics/107/?user=dynaimic_user&show_title=false&dynamic_index=level")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/12/?user=dynaimic_user&show_title=false&dynamic_index=level")
                 .then(function (response) {
                     return response.json();
                 })
@@ -211,7 +211,7 @@
     <div id="TopCoin" class="mytabcontent" style="text-align:center;width:100%;">
         <div class="scrollable-content"><div id="incr-top-coin"></div></div>
         <script>
-            fetch("http://127.0.0.1:8080/api/g_mechanics/108/?user=dynaimic_user&show_title=false&dynamic_index=coin")
+            fetch("http://127.0.0.1:8080/api/g_mechanics/13/?user=dynaimic_user&show_title=false&dynamic_index=coin")
                 .then(function (response) {
                     return response.json();
                 })

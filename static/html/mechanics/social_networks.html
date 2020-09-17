@@ -364,7 +364,9 @@
 <script>
 
 function saveProfile(){
- 
+  
+  document.querySelector("#description-input").value = document.querySelector("#description-input").value.replace(/\'/g," ");
+  alert(document.querySelector("#description-input").value);
   fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/edit_social_profile?new_image=" + document.querySelector("#profile-img").name + "&new_description=" + document.querySelector("#description-input").value)
     .then(function (response) {
         return response.json();

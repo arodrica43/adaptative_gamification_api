@@ -53,7 +53,8 @@ router.register(r'lotteries', views.LotteryViewSet)
 router.register(r'social_networks', views.SocialNetworkViewSet)
 router.register(r'social_statuses', views.SocialStatusViewSet)
 router.register(r'knowledge_shares', views.KnowledgeShareViewSet)
-router.register(r'knowledge_gifts', views.KnowledgeGiftViewSet)
+router.register(r'gifts', views.GiftViewSet)
+router.register(r'gift_openers', views.GiftOpenerViewSet)
 #Adaptative mechanics
 router.register(r'adaptatives', views.AdaptativeUtilitiesViewSet)
 
@@ -65,6 +66,8 @@ urlpatterns += [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/gamers/<str:username>', views.GamerViewSet),
+    path('api/gamers/<str:username>/add_gift', views.add_gift),
+    path('api/gamers/<str:username>/open_gift', views.open_gift),
     path('api/gamers/<str:username>/add_friend/<str:friend_username>', views.add_friend),
     path('api/gamers/<str:username>/del_friend/<str:friend_username>', views.del_friend),
     path('api/gamers/<str:username>/retrieve_friends', views.retrieve_friends),
