@@ -12,12 +12,21 @@
 }
 </style>
 
-<div style="text-align:center">
+<div id ="main-content-levels" style="text-align:center">
   <h2 id = "header-lvl"></h2>     
   <div id="value"></div>
    <div id="progress"></div>
   
 <script>
+
+    //INTERACTION INIT -----------------------------------------------------------------------
+    //Dynamic property :: Log tracking functions
+    include-base-tracking
+    include-onclick-tracking
+    start_main_time();
+    start_focus_time("main-content-levels");
+    start_logs(log,"dynamic_user", "dynamic_mechanic_index",15);
+    // ---------------------------------------------------------------------------------------
 
     fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechanic url
         .then(function (response) {
@@ -27,11 +36,23 @@
             var percent = 100*myJson.value/ myJson.max_value  + '%';
             document.querySelector("#header-lvl").innerHTML = myJson.title;
             document.querySelector("#value").innerHTML = "You have reached " + myJson.by + " " + myJson.value +"!<br><br>" ;
-            document.querySelector("#progress").innerHTML = '<div class="progress">' +
+            document.querySelector("#progress").innerHTML = '<div class="progress" id="progress-bar-div">' +
                                                                 '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="'+ myJson.value +'" aria-valuemin="0" aria-valuemax="'+myJson.max_value+'" style="width:'+percent+'">' +
                                                                      percent +
                                                                 '</div>' +
-                                                            '</div>';             
+                                                            '</div>'; 
+            document.querySelector("#progress-bar-div").onclick = function(){
+                // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 2, message:"Progress bar clicked", register : log, level:1,type:"ImageClick"});
+                // --------------------------------------------------------------------------
+            }   
+            document.querySelector("#value").onclick = function(){
+                // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 2, message:"Current level text clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }          
         })
         .catch(function (error) {
             console.log("Error: " + error);

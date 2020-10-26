@@ -17,3 +17,15 @@ delete from api_gamerprofile;
 delete from sqlite_sequence where name='api_gamerprofile';
 delete from auth_user;
 delete from sqlite_sequence where name='auth_user';
+
+
+# INTERACTION TRACKING :: INIT
+include-base-tracking // default timers and checkpoint function
+include-onclick-tracking //onclick tracking function
+start_main_time(0); //start counting main_time
+start_focus_time(0,"g_mechanic-id"); //start counting focus_time
+start_logs(log,"dynamic_user", "dynamic_mechanic_index",n) //Start logging every n seconds
+
+# INTERACTION TRACKING :: Click OCCURRENCE
+
+log_click({message:"Main-Badge Icon clicked", register : log});

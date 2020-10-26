@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<head>
-
-  
+<head> 
 </head>
 <body>
 
@@ -48,7 +46,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 
-
 </style>
 </head>
 <body>
@@ -75,7 +72,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
 
 
-<div  class = "container-fluid" style="text-align:center">
+<div  id="main-content-bdg" class = "container-fluid" style="text-align:center">
   <h2 id = "header-bdg"></h2>  
   <br>   
   <div id="icon"  style="width:100%; text-align:center;"></div>
@@ -84,7 +81,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 <script>
 
-
+    //INTERACTION INIT -----------------------------------------------------------------------
+    //Dynamic property :: Log tracking functions
+    include-base-tracking
+    include-onclick-tracking
+    start_main_time();
+    start_focus_time("main-content-bdg");
+    start_logs(log,"dynamic_user", "dynamic_mechanic_index",15)
+    // ---------------------------------------------------------------------------------------
     fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechanic url
         .then(function (response) {
             return response.json();
@@ -105,37 +109,72 @@ body {font-family: Arial, Helvetica, sans-serif;}
                                                                     '<div class="row no-gutters" style = "text-align:center;">' +
                                                                         
                                                                     '<div class="col-sm-12">' +
-                                                                          '<img class="card-img-top" src="' + icon + '" alt="Card image" style="width:30%;" >' +
+                                                                          '<img id = "main-badge" class="card-img-top" src="' + icon + '" alt="Card image" style="width:30%;">' +
                                                                     '</div>' +
                                                                     '<div class="col-sm-12" style="text-align:center;">' +
                                                                       '<div class="card-body" >' + 
-                                                                          '<h3 class="card-title" style = "text-align:center;">' + myJson.name + '</h3>' +
-                                                                          '<p class="card-text" style = "text-align:center;"> ' + descr + ' </p>' +
+                                                                          '<h3 id="name-bdg-text" class="card-title" style = "text-align:center;">' + myJson.name + '</h3>' +
+                                                                          '<p id="desc-bdg-text" class="card-text" style = "text-align:center;"> ' + descr + ' </p>' +
                                                                       '</div>' +
                                                                       '<button id="myBtn">See all badges</button>' +
                                                                     '</div>' +
                                                                     '</div><br>' +
-                                                                  '</div>'  ;
-            
-            
-            
-            
-            
-
-                                                        
-                        // Get the modal
+                                                                  '</div>';                                       
+            // Get the modal
             var modal = document.getElementById("myModal");
-
             // Get the button that opens the modal
             var btn = document.getElementById("myBtn");
-
+            var bdge = document.getElementById("main-badge");
+            var txt1 = document.getElementById("name-bdg-text");
+            var txt2 = document.getElementById("desc-bdg-text");              
             // Get the <span> element that closes the modal
             var span = document.getElementsByClassName("close")[0];
+            txt1.onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: button-click interaction
+              log_click({itime: 2, message:"Main badge name clicked", register : log, level:1,type:"TextClick"});
+               // --------------------------------------------------------------------------
+              }
 
+            txt2.onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: button-click interaction
+              log_click({itime: 2,message:"Main badge description clicked", register : log, level:1,type:"TextClick"});
+               // --------------------------------------------------------------------------
+              }
+
+            bdge.onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              
+              //Logging :: button-click interaction
+              log_click({itime: 2,message:"Main badge icon clicked", register : log, level:1,type:"ImageClick"});
+               // --------------------------------------------------------------------------
+              }
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+              modal.style.display = "none";
+               // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: modal-close interaction
+              log_click({itime: 2,message:"Badges modal close (Click x button)", register : log, level:2,type:"ModalClose"});
+              // --------------------------------------------------------------------------
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                modal.style.display = "none";
+                // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: modal-close interaction
+                log_click({itime: 2,message:"Badges modal close (Click outside modal)", register : log, level:2,type:"ModalClose"});
+                // --------------------------------------------------------------------------
+              }
+            }  
             // When the user clicks the button, open the modal 
             btn.onclick = function() {
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: button-click interaction
+              log_click({itime: 2,message:"Open all badges button clicked", register : log, level:1,type:"ButtonClick"});
+              // --------------------------------------------------------------------------
               modal.style.display = "block";
-
               document.querySelector("#badge-set").innerHTML = "";
               fetch("http://127.0.0.1:8080/api/badges/retrieve_for_user/dynamic_user") // WARNING: should be replaced by a concrete username
               .then(function (response) {
@@ -158,63 +197,59 @@ body {font-family: Arial, Helvetica, sans-serif;}
                       }else{
                         icon = "http://127.0.0.1:8080/media/badge_icons/locked.png";
                         descr = 'Increase ' + item[0].by + ' over ' + item[0].threshold + ' to unlock it';
-                        //alert(descr);
                       }
                       document.querySelector("#badge-set").innerHTML += '<div class="card" style="width:100%; border: none;">' +
                                                                           '<div class="row no-gutters"  style="text-align:center;">' +
                                                                           '<div class="col-sm-4">' +
-                                                                                '<img class="card-img-top" src="' + icon + '" alt="Card image" style="width:30%;" >' +
+                                                                                '<img id ="badge-set-bdg-icon-' + index + '" class="card-img-top" src="' + icon + '" alt="Card image" style="width:30%;" >' +
                                                                           '</div>' +
                                                                                 '<div class="col-sm-4" style="text-align:left;">' +
                                                                                   '<div class="card-body">' + 
-                                                                                      '<h3 class="card-title">' + item[0].name + '</h3>' +
-                                                                                      '<p class="card-text"> ' + descr + ' </p>' +
+                                                                                      '<h3 class="card-title" id="badge-set-bdg-title-' + index + '">' + item[0].name + '</h3>' +
+                                                                                      '<p class="card-text" id="badge-set-bdg-descr-' + index + '"> ' + descr + ' </p>' +
                                                                                   '</div>' +
                                                                                 '</div>' +
                                                                           '</div>' +
                                                                         '</div><br>';
                   }
-            
-              
-                  
-
-                  
-                  //myJson.results.forEach(render_badge);
-
-                  //function render_badge(item, index) {
-                    //  alert(item.url);
-                  //}
-
-                  //alert(myJson.results[0].url);
-                  
+                  myJson.results.forEach(function(item,index){
+                    var tmp_img = document.getElementById("badge-set-bdg-icon-" + index);
+                    var tmp_txt1 = document.getElementById("badge-set-bdg-descr-" + index);   
+                    var tmp_txt2 = document.getElementById("badge-set-bdg-title-" + index);              
+                    tmp_img.onclick = function(){
+                      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                      //Logging :: image-click interaction
+                      log_click({itime: 2,message:"Badge icon clicked (badge " + index + " in badge set)", register : log, level:2,type:"ImageClick"});
+                      // --------------------------------------------------------------------------
+                      }
+                    tmp_txt1.onclick = function(){
+                        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                      //Logging :: text-click interaction
+                      log_click({itime: 2,message:"Badge description clicked (badge " + index + " in badge set)", register : log, level:2,type:"TextClick"});
+                      //alert("Main time:" + main_time());
+                      // --------------------------------------------------------------------------
+                    }
+                      tmp_txt2.onclick = function(){
+                        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                      //Logging :: text-click interaction
+                      log_click({itime: 2,message:"Badge title clicked (badge " + index + " in badge set)", register : log, level:2,type:"TextClick"});
+                      //alert("Main time:" + main_time());
+                      // --------------------------------------------------------------------------
+                    }
+                  });               
               })
               .catch(function (error) {
                   alert("User not found!");
                   console.log("Error: " + error);
               });
-            }
-
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-              modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-              if (event.target == modal) {
-                modal.style.display = "none";
-              }
-            }
-            
-           
-            //document.querySelector("#score").innerHTML = "Your " + myJson.given_by + " is " + myJson.score ;
-            //document.querySelector("#uname").innerHTML = "Username: " + myJson.user ;
-             
+            }           
         })
         .catch(function (error) {
             console.log("Error: " + error);
         });
-</script> 
+</script>
+
+
 
 
 

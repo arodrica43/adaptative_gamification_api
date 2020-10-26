@@ -3,8 +3,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
-
  <style>
   /* Style the mytab */
 .mytab {
@@ -41,7 +39,6 @@
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  
 }
 
 #scrollable-content {
@@ -85,8 +82,7 @@
 
   @media only screen and (min-width: 200px) {
     .card {
-    width:100%;
-
+      width:100%;
       margin-top:5px;
       margin-bottom:5px;
       margin-left:auto;
@@ -165,7 +161,7 @@
 }
 
 .profilecards_item {
-  height:550px;
+  height:350px;
   display: flex;
   padding: 1rem;
 }
@@ -259,103 +255,92 @@
 }
  </style>
  
- <div id="main-incr-content" style="width:50%;margin: 0 auto;"></div>
+<div id="main-content-snet" style="width:80%;margin: 0 auto;"></div>
 
 <!-- The Profile Modal -->
 <div id="profileModal" class="modal">
-
   <!-- Modal content -->
   <div class="modal-content" style = " width: 50%;">
- 
     <div class="modal-header">
         <div class="container-fluid">
           <!-- Control the column width, and how they should appear on different devices -->
-          
             <div><span class="close" id="close1">&times;</span></div>
             <button id="friend-friend-follow" class="follow" style="width:30%; position:relative;">---</button>
-          
         </div>     
     </div>
-    <div class="modal-body" style="text-align:center;">
-      
-        <br>
-        <img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/19339625881548233621-512.png" id="friend-profile-img" style="width:30%;" />
-        <br><br>
-        <h2 id="friend-username" style="text-align:center;"></h2>
-        <hr>
-          <div id="friend-descr"></div>
-        <hr>
-          <button data-toggle="collapse" data-target="#friend-friends" class="btn btn-primary" style="text-align:center; width:100%; background: #2C2C2C; border-color:#2C2C2C;">Friends List</button>
-          <div id="friend-friends" class="collapse" style="text-align:center;">
-            <br>
-            <div id="friend-scrollable-content">
-                <div class="all">
-                  <div class="cards" id = "friend-friends-grid">          
-                  </div>
-                </div>                  
-            </div>
-          </div> 
+    <div class="modal-body" style="text-align:center;"> 
+      <br>
+      <img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/19339625881548233621-512.png" id="friend-profile-img" style="width:30%;" />
+      <br><br>
+      <h2 id="friend-username" style="text-align:center;"></h2>
+      <hr>
+        <div id="friend-descr"></div>
+      <hr>
+        <button id="show-friends-of-friends-list" data-toggle="collapse" data-target="#friend-friends" class="btn btn-primary" style="text-align:center; width:100%; background: #2C2C2C; border-color:#2C2C2C;">Friends List</button>
+        <div id="friend-friends" class="collapse" style="text-align:center;">
+          <br>
+          <div id="friend-scrollable-content">
+              <div class="all">
+                <div class="cards" id = "friend-friends-grid">          
+                </div>
+              </div>                  
+          </div>
+        </div> 
     </div>
   </div>
 </div>
 
 <!-- Settings Modal -->
 <div id="settingsModal" class="modal">
-
   <!-- Modal content -->
   <div class="modal-content" style = " width: 50%;">
- 
     <div class="modal-header">
         <div class="container-fluid">
           <!-- Control the column width, and how they should appear on different devices -->
-          
             <div><span class="close" id="close">&times;</span></div>
             <h2>Edit Social Profile</h2>
-          
         </div>     
     </div>
     <div class="modal-body">
-              <div class="row">
-                <div class="column">
-                    <label style="text-align:center;">Select Avatar</label><br>
-            
-                </div>
-              </div>
-              <div class="row">
-                <div class="column">
-                  <img id = "avatar-diamond" name="diamond" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/diamond.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-art" name="art" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/art.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-tech" name="tech" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/tech.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-games" name="games" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/games.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-              </div>
-              <div class="row">
-                <div class="column">
-                  <img id = "avatar-music" name="music" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/music.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-science" name="science" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/science.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-money" name="money" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/money.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-                <div class="column">
-                   <img id = "avatar-photo" name="photo" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/photo.png" alt="Snow" onclick="selectAvatar(this.name)">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="column">
-                    <br> <label for="description-input">Description:</label><br><br>
-                      <textarea name="description" style="max-height:120px; height: 40px;width:100%;padding-top:5px; padding-left:5px; resize: none;float:left; overflow:auto;" id="description-input" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                </div>
-              </div>
+        <div class="row">
+          <div class="column">
+              <label style="text-align:center;">Select Avatar</label><br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img id = "avatar-diamond" name="diamond" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/diamond.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-art" name="art" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/art.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-tech" name="tech" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/tech.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-games" name="games" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/games.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img id = "avatar-music" name="music" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/music.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-science" name="science" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/science.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-money" name="money" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/money.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+          <div class="column">
+              <img id = "avatar-photo" name="photo" class ="avatar-image" src="http://127.0.0.1:8080/media/social_icons/photo.png" alt="Snow" onclick="selectAvatar(this.name)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+              <br> <label for="description-input">Description:</label><br><br>
+                <textarea name="description" maxlength="800" style="max-height:120px; height: 40px;width:100%;padding-top:5px; padding-left:5px; resize: none;float:left; overflow:auto;" id="description-input" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+          </div>
+        </div>
     </div>
     <div class="modal-footer" style="border-top: 0 none; text-align:right;"><button class="submit btn btn-default" type="submit" style="width:25%;margin-top:0px;" onclick="saveProfile()" >Save</button></div>
   </div>
@@ -363,28 +348,80 @@
 
 <script>
 
-function saveProfile(){
-  
-  document.querySelector("#description-input").value = document.querySelector("#description-input").value.replace(/\'/g," ");
-  alert(document.querySelector("#description-input").value);
-  fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/edit_social_profile?new_image=" + document.querySelector("#profile-img").name + "&new_description=" + document.querySelector("#description-input").value)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (myJson) {
-        
-            document.querySelector("#mydescr").innerHTML = document.querySelector("#description-input").value;
-      
-    })
-    .catch(function (error) {
-        console.log("Error: " + error);
-    });
+//INTERACTION INIT -----------------------------------------------------------------------
+  //Dynamic property :: Log tracking functions
+  include-base-tracking
+  include-onclick-tracking
+  start_main_time();
+  start_focus_time("main-content-snet");
+  start_logs(log,"dynamic_user", "dynamic_mechanic_index",15)
+  // ---------------------------------------------------------------------------------------
 
-      var modal = document.getElementById("settingsModal");
-      modal.style.display = "none";
+
+document.querySelector("#friend-profile-img").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Friend profile image (profile modal) clicked", register : log, level:2,type:"ImageClick"});
+                // --------------------------------------------------------------------------
+            }
+document.querySelector("#friend-username").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Friend profile username (profile modal) clicked", register : log, level:2,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+document.querySelector("#friend-descr").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Friend profile description (profile modal) clicked", register : log, level:2,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+document.querySelector("#description-input").onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Description' (settings modal) focused in", register : log, level:2,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+document.querySelector("#description-input").onfocusout = function(){
+    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: input-out interaction
+    log_input({itime: 2,message:"Input field 'Description' (settings modal) focused out", register : log, level:2,type:"InputOut"});
+    // --------------------------------------------------------------------------
+    }
+document.querySelector("#show-friends-of-friends-list").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Show friends of friend list button (profile modal) clicked", register : log, level:2,type:"ButtonClick"});
+                // --------------------------------------------------------------------------
+            }
+
+    
+
+function saveProfile(){
+   // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: button-click interaction
+    log_click({itime: 1, message:"Save profile button (settings modal) clicked", register : log, level:2,type:"ButtonClick"});
+    // --------------------------------------------------------------------------
+  document.querySelector("#description-input").value = document.querySelector("#description-input").value.replace(/\'/g," ");
+  fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/edit_social_profile?new_image=" + document.querySelector("#profile-img").name + "&new_description=" + document.querySelector("#description-input").value)
+  .then(function (response) {
+      return response.json();
+  })
+  .then(function (myJson) {
+    document.querySelector("#mydescr").innerHTML = document.querySelector("#description-input").value; 
+  })
+  .catch(function (error) {
+      console.log("Error: " + error);
+  });
+  var modal = document.getElementById("settingsModal");
+  modal.style.display = "none";
 }
 
 function selectAvatar(name){
+   // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+  //Logging :: button-click interaction
+  log_click({itime: 1, message:"Select avatar " + name + " button (settings modal) clicked", register : log, level:2,type:"ButtonClick"});
+  // --------------------------------------------------------------------------
   avatars = document.querySelectorAll("img[id*='avatar']")
   for(var i = 0; i < avatars.length; i++){
     document.getElementById("avatar-" + avatars[i].name).style = "width:80%;";
@@ -392,52 +429,63 @@ function selectAvatar(name){
   document.getElementById("avatar-" + name).style = "width:100%; opacity:1;";
   document.querySelector("#profile-img").src = "http://127.0.0.1:8080/media/social_icons/" + name + ".png";
   document.querySelector("#profile-img").name = name;
-  
-
 }
 
- function followUser(uname,ids){
+function followUser(uname,ids,from){
 
-      
-      if (document.getElementById(ids).innerHTML == "Follow"){
-        fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/add_friend/" + uname)
-        .then(function (response) {
-            return response.text();
-        })
-        .then(function (answer) {
-          if(answer == "OK"){
-            //alert("You have added " + uname + " to your friends list");
-             document.getElementById(ids).innerHTML = "Following";
-              
-              document.getElementById("follow-" + uname).innerHTML = "Following";
-              document.getElementById("friends-grid").innerHTML = "";
-              populateWithUsers(populateFriends,"");
-          }
-        })
-        .catch(function (error) {
-            console.log("Error: " + error);
-        });
-      }else if(document.getElementById(ids).innerHTML == "Following"){
-         fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/del_friend/" + uname)
-          .then(function (response) {
-              return response.text();
-          })
-          .then(function (answer) {
-            if(answer == "OK"){
-              //alert("You have deleted " + uname + " from your friends list");
-              document.getElementById(ids).innerHTML = "Follow";
-              document.getElementById("follow-" + uname).innerHTML = "Follow";
+  switch(from){
+      case 0: //Comes from search tab
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Follow " + uname + " button (search tab) clicked", register : log, level:1,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+        break;
+      case 1: //Comes from modal
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Follow " + uname + " button (modal) clicked", register : log, level:2,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+        break;
+    }
 
-              document.getElementById("friends-grid").innerHTML = "";
-              populateWithUsers(populateFriends,"");
-            }
-          })
-          .catch(function (error) {
-              console.log("Error: " + error);
-          });
+  if (document.getElementById(ids).innerHTML == "Follow"){
+    fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/add_friend/" + uname)
+    .then(function (response) {
+        return response.text();
+    })
+    .then(function (answer) {
+      if(answer == "OK"){
+        //alert("You have added " + uname + " to your friends list");
+          document.getElementById(ids).innerHTML = "Following";
+          
+          document.getElementById("follow-" + uname).innerHTML = "Following";
+          document.getElementById("friends-grid").innerHTML = "";
+          populateWithUsers(populateFriends,"");
       }
+    })
+    .catch(function (error) {
+        console.log("Error: " + error);
+    });
+  }else if(document.getElementById(ids).innerHTML == "Following"){
+      fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/del_friend/" + uname)
+      .then(function (response) {
+          return response.text();
+      })
+      .then(function (answer) {
+        if(answer == "OK"){
+          //alert("You have deleted " + uname + " from your friends list");
+          document.getElementById(ids).innerHTML = "Follow";
+          document.getElementById("follow-" + uname).innerHTML = "Follow";
 
- }
+          document.getElementById("friends-grid").innerHTML = "";
+          populateWithUsers(populateFriends,"");
+        }
+      })
+      .catch(function (error) {
+          console.log("Error: " + error);
+      });
+  }
+}
 
 function updateUsers() {
   //alert(document.getElementById("user-search-bar").value);
@@ -446,76 +494,65 @@ function updateUsers() {
 }
 
 function populateFriendsOfFriends(item,index,follow_text){
-         
-                 document.getElementById("friend-friends-grid").innerHTML += '<button class="card shadow-1" style="" onclick="showProfileModal(\'' + item[1].username + '\',\'' + item[0].image + '\',\'' + item[0].description + '\',\'' + follow_text + '\')">'+
-                                                                  '<div class="container-fluid" style="width:100%;">'+    
-                                                                    '<div class="row">'+
-                                                                      '<div class="col-sm-3" ><img src="http://127.0.0.1:8080/media/social_icons/' + item[0].image + '.png" id="profile-img" style="min-width:69px;width:70px;height:69px;" /></div>'+
-                                                                      '<div class="col-sm-9 " style="text-align:center;font-size: calc(2rem + 1vw);padding-top:10px; padding-right:30px;">' + item[1].username + '</div>'+
-                                                                    '</div>'+
-                                                                  '</div>'+       
-                                                               '</button>';
-
-              
-            }
-
-
+  document.getElementById("friend-friends-grid").innerHTML += '<button class="card shadow-1" style="" onclick="showProfileModal(\'' + item[1].username + '\',\'' + item[0].image + '\',\'' + item[0].description + '\',\'' + follow_text + '\',2)">'+
+                                                              '<div class="container-fluid" style="width:100%;">'+    
+                                                                '<div class="row">'+
+                                                                  '<div class="col-sm-3" ><img src="http://127.0.0.1:8080/media/social_icons/' + item[0].image + '.png" id="profile-img" style="min-width:69px;width:70px;height:69px;" /></div>'+
+                                                                  '<div class="col-sm-9 " style="text-align:center;font-size: calc(2rem + 1vw);padding-top:10px; padding-right:30px;">' + item[1].username + '</div>'+
+                                                                '</div>'+
+                                                              '</div>'+       
+                                                            '</button>';  
+}
 
 function populateSearch(item,index,follow_text){
    document.getElementById("search-users-grid").innerHTML += '<li class="profilecards_item">'+
-                                                        '<div class="profilecard">'+
-                                                          '<div class="profilecard" style=" height:500px; cursor: pointer;" onclick="showProfileModal(\'' + item.user.username + '\',\'' + item.social_profile.image + '\',\'' + item.social_profile.description + '\',\'dynamic_follow\')">'+
-                                                              '<div class="profilecard_image"><img src="http://127.0.0.1:8080/media/social_icons/' + item.social_profile.image + '.png"  style="width:100%;"></div>'+
-                                                                '<div class="profilecard_content">'+
-                                                                    '<h2><div class="user-name">' + item.user.username + '</div></h2>' +  
-                                                                  '<p class="profilecard_text">' + item.social_profile.description + '</p>' +
-                                                                '</div>'+
-                                                          '</div>'+
-                                                          '<button class="btn profilecard_btn" onClick="followUser(\'' + item.user.username + '\',\'follow-' +  item.user.username + '\')" id = "follow-' + item.user.username  + '">' + follow_text + '</button>'+
-                                                        '</div>'+
-                                                      '</li>';
-               
-            }
-
-
-
-function populateFriends(item,index){
-                 document.getElementById("friends-grid").innerHTML += '<button class="card shadow-1" style="" onclick="showProfileModal(\'' + item[1].username + '\',\'' + item[0].image + '\',\'' + item[0].description + '\',\'Following\')">'+
-                                                                  '<div class="container-fluid" style="width:100%;">'+    
-                                                                    '<div class="row">'+
-                                                                      '<div class="col-sm-3" ><img src="http://127.0.0.1:8080/media/social_icons/' + item[0].image + '.png" id="profile-img" style="min-width:69px;width:70px;height:69px;" /></div>'+
-                                                                      '<div class="col-sm-9 " style="text-align:center;font-size: calc(2rem + 1vw);padding-top:10px; padding-right:30px;">' + item[1].username + '</div>'+
+                                                            '<div class="profilecard">'+
+                                                              '<div class="profilecard" style=" height:500px; cursor: pointer;" onclick="showProfileModal(\'' + item.user.username + '\',\'' + item.social_profile.image + '\',\'' + item.social_profile.description + '\',\'dynamic_follow\',1)">'+
+                                                                  '<div class="profilecard_image"><img src="http://127.0.0.1:8080/media/social_icons/' + item.social_profile.image + '.png"  style="width:100%;"></div>'+
+                                                                    '<div class="profilecard_content">'+
+                                                                        '<h2><div class="user-name">' + item.user.username + '</div></h2>' +  
+                                                                      '<p class="profilecard_text">' + item.social_profile.description + '</p>' +
                                                                     '</div>'+
-                                                                  '</div>'+       
-                                                               '</button>';
-
-              
-            }
-
-function populateWithUsers(how, extra_args){
-     fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/retrieve_friends" + extra_args)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (myJson) {
-            var friends = myJson.friends;
-            friends.forEach(how);          
-        })
-        .catch(function (error) {
-            console.log("Error: " + error);
-        });
+                                                              '</div>'+
+                                                              '<button class="btn profilecard_btn" onClick="followUser(\'' + item.user.username + '\',\'follow-' +  item.user.username + '\',0)" id = "follow-' + item.user.username  + '">' + follow_text + '</button>'+
+                                                            '</div>'+
+                                                          '</li>';  
 }
 
+function populateFriends(item,index){
+  document.getElementById("friends-grid").innerHTML += '<button class="card shadow-1" style="" onclick="showProfileModal(\'' + item[1].username + '\',\'' + item[0].image + '\',\'' + item[0].description + '\',\'Following\',0)">'+
+                                                      '<div class="container-fluid" style="width:100%;">'+    
+                                                        '<div class="row">'+
+                                                          '<div class="col-sm-3" ><img src="http://127.0.0.1:8080/media/social_icons/' + item[0].image + '.png" id="profile-img" style="min-width:69px;width:70px;height:69px;" /></div>'+
+                                                          '<div class="col-sm-9 " style="text-align:center;font-size: calc(2rem + 1vw);padding-top:10px; padding-right:30px;">' + item[1].username + '</div>'+
+                                                        '</div>'+
+                                                      '</div>'+       
+                                                    '</button>';              
+}
 
-
+function populateWithUsers(how, extra_args){
+  fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/retrieve_friends" + extra_args)
+  .then(function (response) {
+      return response.json();
+  })
+  .then(function (myJson) {
+      var friends = myJson.friends;
+      friends.forEach(how);          
+  })
+  .catch(function (error) {
+      console.log("Error: " + error);
+  });
+}
 
 function openTab(evt, tabName) {
-
+  // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: button-click interaction
+    log_click({itime: 1, message:"Tab button '" + tabName + "' clicked", register : log, level:1,type:"ButtonClick"});
+    // --------------------------------------------------------------------------
 
   if(tabName == "Profile"){
-      document.getElementById("friends-grid").innerHTML = "";
-      populateWithUsers(populateFriends,"");
-    
+    document.getElementById("friends-grid").innerHTML = "";
+    populateWithUsers(populateFriends,"");
   }
   var i, mytabcontent, mytablinks;
   mytabcontent = document.getElementsByClassName("mytabcontent");
@@ -532,151 +569,192 @@ function openTab(evt, tabName) {
 
 
 function loadPopulateSearch(url){
-    fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (myJson1) {
-            document.querySelector("#profile-img").src = "http://127.0.0.1:8080/media/social_icons/" + myJson1.social_profile.image + ".png";
-            document.querySelector("#profile-img").name = myJson1.social_profile.image;
-            document.querySelector("#username").innerHTML = myJson1.user.username ;
-            document.querySelector("#mydescr").innerHTML = myJson1.social_profile.description ;
-            try{
-              document.getElementById("avatar-" + myJson1.social_profile.image).style = "width:100%; opacity:1;";
-            }catch(e){
-              
+  fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/")
+  .then(function (response) {
+      return response.json();
+  })
+  .then(function (myJson1) {
+    document.querySelector("#profile-img").src = "http://127.0.0.1:8080/media/social_icons/" + myJson1.social_profile.image + ".png";
+    document.querySelector("#profile-img").name = myJson1.social_profile.image;
+    document.querySelector("#username").innerHTML = myJson1.user.username ;
+    document.querySelector("#mydescr").innerHTML = myJson1.social_profile.description ;
+        document.querySelector("#profile-img").onclick = function(){
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Profile image clicked", register : log, level:1,type:"ImageClick"});
+        // --------------------------------------------------------------------------
+    }
+    document.querySelector("#username").onclick = function(){
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Username text clicked", register : log, level:1,type:"TextClick"});
+        // --------------------------------------------------------------------------
+    }
+    document.querySelector("#mydescr").onclick = function(){
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Description text clicked", register : log, level:1,type:"TextClick"});
+        // --------------------------------------------------------------------------
+    }
+    try{
+      document.getElementById("avatar-" + myJson1.social_profile.image).style = "width:100%; opacity:1;";
+    }catch(e){/*Nothing*/}
+    var friends =  myJson1.social_profile.data.friends;
+    fetch(url)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (myJson) {
+        document.getElementById("search-grid").innerHTML = "";
+        document.getElementById("search-users-grid").innerHTML = "";
+        for(var i = 0; i < myJson.results.length; i++){
+            var follow_text = "";
+            if(friends.includes(myJson.results[i].user.username)){
+              follow_text = "Following";
+            }else{
+              follow_text = "Follow";
             }
-             var friends =  myJson1.social_profile.data.friends;
-             fetch(url)
-              .then(function (response) {
-                  return response.json();
-              })
-              .then(function (myJson) {
-                  document.getElementById("search-grid").innerHTML = "";
-                  document.getElementById("search-users-grid").innerHTML = "";
-                  for(var i = 0; i < myJson.results.length; i++){
-                      var follow_text = "";
-                      if(friends.includes(myJson.results[i].user.username)){
-                        follow_text = "Following";
-                      }else{
-                        follow_text = "Follow";
-                      }
-                      if( myJson.results[i].user.username != 'dynamic_user' ){
-                           // item = myJson.results[i]
-                           //index = i
-                           populateSearch(myJson.results[i],i,follow_text);
-                      }
-                     
-                  }
-              })
-              .catch(function (error) {
-                  console.log("Error: " + error);
-              });
-
-        })
-        .catch(function (error) {
-            console.log("Error: " + error);
-        });
+            if( myJson.results[i].user.username != 'dynamic_user' ){
+              populateSearch(myJson.results[i],i,follow_text);
+            } 
+        }
+    })
+    .catch(function (error) {
+        console.log("Error: " + error);
+    });
+  })
+  .catch(function (error) {
+      console.log("Error: " + error);
+  });
 }
 
 function showSettingsModal() {
-   
+    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+      //Logging :: button-click interaction
+      log_click({itime: 1, message:"Open settings button clicked", register : log, level:1,type:"ButtonClick"});
+      // --------------------------------------------------------------------------
     document.querySelector("#description-input").value = document.querySelector("#mydescr").innerHTML;
-     var modal = document.getElementById("settingsModal");
-
-            // Get the <span> element that closes the modal
+    var modal = document.getElementById("settingsModal");
+    // Get the <span> element that closes the modal
     var span = document.getElementById("close");
-
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+      //Logging :: button-click interaction
+      log_click({itime: 1, message:"Settings modal close (Click x button)", register : log, level:2,type:"ModalClose"});
+      // --------------------------------------------------------------------------
       modal.style.display = "none";
     }
-
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
       if (event.target == modal) {
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: modal-close interaction
+        log_click({itime: 1,message:"Settings modal close (Click outside modal)", register : log, level:2,type:"ModalClose"});
+        // --------------------------------------------------------------------------
         modal.style.display = "none";
       }
     }
     modal.style.display = "block";
-    
-
 }
 
-  function showProfileModal(uname,image,descr,follow_text){
+  function showProfileModal(uname,image,descr,follow_text,from){
 
-            var modal = document.getElementById("profileModal");
-            // Get the <span> element that closes the modal
-            var span = document.getElementById("close1");
+    switch(from){
+      case 0: //Comes from friends list
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Open " + uname + " profile button (friends list) clicked", register : log, level:2,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+        break;
+      case 1: //Comes from search tab
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Open " + uname + " profile button (search tab) clicked", register : log, level:2,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+        break;
+      case 2: //Comes from friends of friends
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Open " + uname + " profile button (friends of friends list) clicked", register : log, level:3,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+        break;
+    }
+    
 
-             // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-              modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-              if (event.target == modal) {
-                modal.style.display = "none";
-              }
-            }
-
-            document.getElementById("friend-friends-grid").innerHTML = "";
-            document.querySelector("#friend-username").innerHTML = uname;
-            document.querySelector("#friend-profile-img").src = "http://127.0.0.1:8080/media/social_icons/" + image + ".png";
-            document.querySelector("#friend-descr").innerHTML = descr;
-            
-            if(follow_text == 'dynamic_follow'){
-              follow_text =  document.getElementById("follow-" + uname).innerHTML;
-            }
-      
-            document.querySelector("#friend-friend-follow").innerHTML = follow_text;
-            document.querySelector("#friend-friend-follow").onclick = function followEvent(){
-                                                                          followUser(uname,'friend-friend-follow');
-                                                                        }
-
-              fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/retrieve_friends")
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (myJson1) {
-                    var myfriends = myJson1.friends;
-                        fetch('http://127.0.0.1:8080/api/gamers/' + uname + '/retrieve_friends')
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then(function (myJson) {
-                                var friend_friends = myJson.friends;  
-                                for(var i = 0; i < friend_friends.length; i++){
-                                      funame = friend_friends[i][1].username;
-                                      var follow_text = "";
-                                      for(var j = 0; j < myfriends.length;j++){
-                                        
-                                          if('dynamic_user' == funame){
-                                            follow_text = "---";
-                                            break;
-                                          }else if(myfriends[j][1].username == funame){
-                                            follow_text = "Following";
-                                            break;
-                                          }else{
-                                            follow_text = "Follow";
-                                          }
-                                      }
-                                      populateFriendsOfFriends(friend_friends[i],i,follow_text);
-                                }
-                                document.getElementById("profileModal").style.display = "block";
-                        })
-                        .catch(function (error) {
-                            console.log("Error: " + error);
-                        });          
-                })
-                .catch(function (error) {
-                    console.log("Error: " + error);
-                });
+    var modal = document.getElementById("profileModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementById("close1");
+      // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+      //Logging :: button-click interaction
+      log_click({itime: 1, message:"Friend profile modal close (Click x button)", register : log, level:2,type:"ModalClose"});
+      // --------------------------------------------------------------------------
+      modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: modal-close interaction
+        log_click({itime: 1,message:"Friend profile modal close (Click outside modal)", register : log, level:2,type:"ModalClose"});
+        // --------------------------------------------------------------------------
+        modal.style.display = "none";
+      }
+    }
+    document.getElementById("friend-friends-grid").innerHTML = "";
+    document.querySelector("#friend-username").innerHTML = uname;
+    document.querySelector("#friend-profile-img").src = "http://127.0.0.1:8080/media/social_icons/" + image + ".png";
+    document.querySelector("#friend-descr").innerHTML = descr;
+    if(follow_text == 'dynamic_follow'){
+      follow_text =  document.getElementById("follow-" + uname).innerHTML;
+    }
+    document.querySelector("#friend-friend-follow").innerHTML = follow_text;
+    document.querySelector("#friend-friend-follow").onclick = function followEvent(){
+      followUser(uname,'friend-friend-follow',1);
     }
 
+    fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/retrieve_friends")
+      .then(function (response) {
+          return response.json();
+      })
+      .then(function (myJson1) {
+          var myfriends = myJson1.friends;
+              fetch('http://127.0.0.1:8080/api/gamers/' + uname + '/retrieve_friends')
+              .then(function (response) {
+                  return response.json();
+              })
+              .then(function (myJson) {
+                      var friend_friends = myJson.friends;  
+                      for(var i = 0; i < friend_friends.length; i++){
+                            funame = friend_friends[i][1].username;
+                            var follow_text = "";
+                            for(var j = 0; j < myfriends.length;j++){   
+                                if('dynamic_user' == funame){
+                                  follow_text = "---";
+                                  break;
+                                }else if(myfriends[j][1].username == funame){
+                                  follow_text = "Following";
+                                  break;
+                                }else{
+                                  follow_text = "Follow";
+                                }
+                            }
+                            populateFriendsOfFriends(friend_friends[i],i,follow_text);
+                      }
+                      document.getElementById("profileModal").style.display = "block";
+              })
+              .catch(function (error) {
+                  console.log("Error: " + error);
+              });          
+      })
+      .catch(function (error) {
+          console.log("Error: " + error);
+      });
+    }
 
-document.getElementById("main-incr-content").innerHTML =  '<div style="text-align:center;">'+
+document.getElementById("main-content-snet").innerHTML =  '<div style="text-align:center;">'+
                                                               '<h2 id = "header-net"></h2>'+
                                                           '</div>'+
                                                           '<div class="mytab">'+
@@ -687,16 +765,16 @@ document.getElementById("main-incr-content").innerHTML =  '<div style="text-alig
                                                             '<div id="Profile" class="mytabcontent" style="text-align:center;">'+
                                                                 '<div style="width:100%; text-align:right;padding-top:20px;padding-right:20px;">'+ 
                                                                   '<a id="link-ep" href="#" onclick="showSettingsModal()" style="width:10%;">'+
-                                                                    '<img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/11818001221556279759-512.png" id="profile-edit" style="width:5%;" />'+
+                                                                    '<img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/11818001221556279759-512.png" id="profile-edit" style="width:4%;" />'+
                                                                   '</a>'+
                                                                 '</div>'+
-                                                                '<img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/19339625881548233621-512.png" name="diamond" id="profile-img" style="width:30%;" />'+
+                                                                '<img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/19339625881548233621-512.png" name="diamond" id="profile-img" style="width:20%;" />'+
                                                                 '<br><br>'+
                                                                 '<h2 id="username" style="text-align:center;"></h2>'+
                                                                 '<hr>'+
                                                                   '<div id="mydescr"></div>'+
                                                                 '<hr>'+
-                                                                  '<button data-toggle="collapse" data-target="#friends" class="btn btn-primary" style="text-align:center; width:100%; background: #2C2C2C; border-color:#2C2C2C;">Friends List</button>'+
+                                                                  '<button id="show-friends-list-dropdown-button" data-toggle="collapse" data-target="#friends" class="btn btn-primary" style="text-align:center; width:100%; background: #2C2C2C; border-color:#2C2C2C;">Friends List</button>'+
                                                                   '<div id="friends" class="collapse" style="text-align:center;">'+
                                                                     '<br>'+
                                                                     '<div id="scrollable-content">'+
@@ -709,7 +787,7 @@ document.getElementById("main-incr-content").innerHTML =  '<div style="text-alig
                                                             '</div>'+
                                                             '<div id="Search" class="mytabcontent">'+
                                                               '<div style= "height:66px; text-align:center;padding-top:10px;">'+
-                                                                  '<input type="text" class="user-search-bar" placeholder="Search friends..." name="search2" oninput="updateUsers()" value="">'+
+                                                                  '<input id="search-input-field" type="text" class="user-search-bar" placeholder="Search friends..." name="search2" oninput="updateUsers()" value="">'+
                                                               '</div>'+
                                                               '<main class="grid" id="search-grid">'+
                                                               '</main>'+
@@ -719,19 +797,53 @@ document.getElementById("main-incr-content").innerHTML =  '<div style="text-alig
                                                               '</div>'+
                                                             '</div>'+
                                                           '</div>';
-
+document.querySelector("#show-friends-list-dropdown-button").onclick = function(){
+      // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 1, message:"Open friends list button clicked", register : log, level:1,type:"ButtonClick"});
+        // --------------------------------------------------------------------------
+    }
+document.querySelector("#search-input-field").onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Search Users' focused in", register : log, level:2,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+document.querySelector("#search-input-field").onfocusout = function(){
+    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: input-out interaction
+    log_input({itime: 2,message:"Input field 'Search Users' focused out", register : log, level:2,type:"InputOut"});
+    // --------------------------------------------------------------------------
+    }
+document.querySelector("#search-scrollable-content").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'Search' content", register : log, level:2,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'Friends list' content", register : log, level:2,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#friend-scrollable-content").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'Friends of friend list' content", register : log, level:3,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
 document.getElementById("defaultOpen").click();
 loadPopulateSearch("http://127.0.0.1:8080/api/retrieve_users_search?uname_contains=");
 fetch("called_mechanic_url")
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (myJson) {
-        document.querySelector("#header-net").innerHTML = (myJson.title);
-      
-    })
-    .catch(function (error) {
-        console.log("Error: " + error);
-    });
-
+.then(function (response) {
+    return response.json();
+})
+.then(function (myJson) {
+    document.querySelector("#header-net").innerHTML = (myJson.title);
+  
+})
+.catch(function (error) {
+    console.log("Error: " + error);
+});
 </script>

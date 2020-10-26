@@ -50,7 +50,6 @@ class GamerProfile(models.Model):
     def vectorize(self):
         return (self.disruptor,self.free_spirit,self.achiever,self.player,self.socializer,self.philantropist,self.no_player)
 
-
 class SocialProfile(models.Model):
 
     class AvatarType(Enum):   # A subclass of Enum
@@ -87,8 +86,8 @@ def username_exists(value):
         )
 
 def unique_individual_group(value):
-    print("Hey Hey")
-    print(value)
+    #print("Hey Hey")
+    #print(value)
     #print(value['groups'])
     if 'groups' in value.keys():
         groups =  value['groups']
@@ -148,9 +147,20 @@ class GMechanic(models.Model):
             idx = all_mechanics[i].associated_profile[all_mechanics[i].mechanic_type.value]
             if idx != -1:
                 M[i,idx] = 1
-        print(M)
+        #print(M)
         return M
 
+    def statistics_vector(self,user):
+        all_mechanics = GMechanic.objects.all()
+        v = []
+        for gm in all_mechanics:
+            stat_i = InteractionStatistic.objects.filter(user=user, mechanic = gm)
+            if stat_i:
+                stat_i = stat_i[0].interaction_index
+                v += [stat_i] 
+        #print(v, len(v))
+        return v
+        
 
 
 # TO DO: Make class extensions to differentiate between GMechanics interaction statistics and GComponent statistics
@@ -161,6 +171,8 @@ class InteractionStatistic(models.Model):
     # If we want to create statistics related to a user by the username, we should valdate that it exists
     # TO DO: Validate existence of gamer with username = <user>
     user = models.CharField(max_length=255, validators=[username_exists])
+    log = JSONField(default = dict)
+    # TO DO: add a logs JSON field containing <register> and <interaction index>
     interaction_index = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)],)
     class Meta:
         unique_together = ("mechanic", "user")

@@ -80,6 +80,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR + '/static/html/',
+            BASE_DIR + '/static/js/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

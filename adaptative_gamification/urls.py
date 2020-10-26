@@ -23,6 +23,7 @@ from adaptative_gamification import settings
 
 urlpatterns = [
     path('',  views.index),
+    path('js_test/', views.js_test),
     #path('examples/adaptative-mechanic/random/',  views.adaptative_mechanic_example),
     #path('examples/adaptative-mechanic/matrix/',  views.adaptative_mechanic_example_matrix),
     path('admin/', admin.site.urls),
@@ -56,9 +57,7 @@ router.register(r'knowledge_shares', views.KnowledgeShareViewSet)
 router.register(r'gifts', views.GiftViewSet)
 router.register(r'gift_openers', views.GiftOpenerViewSet)
 #Adaptative mechanics
-router.register(r'adaptatives', views.AdaptativeUtilitiesViewSet)
-
-
+router.register(r'adaptatives', views.AdaptativeViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

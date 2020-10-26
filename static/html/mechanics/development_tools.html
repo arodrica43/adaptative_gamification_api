@@ -1,9 +1,18 @@
 
-<div id="main-content"></div> 
+<div id="main-content-development_tools"></div> 
 
 <script>
 
-    document.querySelector("#main-content").innerHTML = '<div style="text-align:center">'+
+    //INTERACTION INIT -----------------------------------------------------------------------
+    //Dynamic property :: Log tracking functions
+    include-base-tracking
+    include-onclick-tracking
+    start_main_time();
+    start_focus_time("main-content-development_tools");
+    start_logs(log,"dynamic_user", "dynamic_mechanic_index",15)
+    // ---------------------------------------------------------------------------------------
+
+    document.querySelector("#main-content-development_tools").innerHTML = '<div style="text-align:center">'+
                                                             '<h2 id = "header-dev"></h2>'+ 
                                                             '<div id="dev-content"></div>'+
                                                             '<br>'+
@@ -55,7 +64,7 @@
                                                                     '<p><label for="threshold">Unlock when greater than:</label>'+
                                                                 '</div>'+
                                                                 '<div class="col-sm-3" style="background-color:white;">'+
-                                                                        '<input type="text" name="threshold" id="lname" size="10"></p>'+
+                                                                        '<input type="text" name="threshold" id="threshold" size="10"></p>'+
                                                                 '</div>'+
                                                             '</div><div id="unlock-elem"></div>'+
                                                             '<div class="row">'+
@@ -69,7 +78,7 @@
 
     document.querySelector("#preview-container").innerHTML =    '<div class="container-fluid" style="border-style: groove; min-height:170px;" >'+
                                                                     '<div class="row">'+
-                                                                        '<div class="col-sm-12" style="background-color:white; text-align:center;">'+ 
+                                                                        '<div class="col-sm-12" style="background-color:white; text-align:center;" id="creation-area-title">'+ 
                                                                             '<h2 style="text-align:center;">Preview of your Mechanic</h2><hr>'+
                                                                         '</div>'+
                                                                     '</div>' + 
@@ -79,7 +88,85 @@
                                                                         '</div>'+
                                                                     '</div>' + 
                                                                 '</div>';
-            
+
+    var input1 = document.getElementById("fname");
+    input1.onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Name' focused in", register : log, level:1,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+    input1.onfocusout = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-out interaction
+        log_input({itime: 2,message:"Input field 'Name' focused out", register : log, level:1,type:"InputOut"});
+        // --------------------------------------------------------------------------
+        }
+
+    var input2 = document.getElementById("lname");
+    input2.onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Description' focused in", register : log, level:1,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+    input2.onfocusout = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-out interaction
+        log_input({itime: 2,message:"Input field 'Description' focused out", register : log, level:1,type:"InputOut"});
+        // --------------------------------------------------------------------------
+        }
+    var input3 = document.getElementById("cars");
+    input3.onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Unlock by' focused in", register : log, level:1,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+    input3.onfocusout = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-out interaction
+        log_input({itime: 2,message:"Input field 'Unlock by' focused out", register : log, level:1,type:"InputOut"});
+        // --------------------------------------------------------------------------
+        }
+
+    var input4 = document.getElementById("threshold");
+    input4.onfocusin = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-in interaction
+        log_input({itime: 2,message:"Input field 'Threshold' focused in", register : log, level:1,type:"InputIn"});
+        // --------------------------------------------------------------------------
+        }
+    input4.onfocusout = function(){
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: input-out interaction
+        log_input({itime: 2,message:"Input field 'Threshold' focused out", register : log, level:1,type:"InputOut"});
+        // --------------------------------------------------------------------------
+        }
+    var input_submit = document.getElementById('submit-btn');
+    input_submit.onclick = function() {
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: button-click interaction
+              log_click({itime: 2,message:"Create element button clicked", register : log, level:1,type:"ButtonClick"});
+              // --------------------------------------------------------------------------
+    }
+    var creation_area = document.getElementById('incr-creation');
+    var created = false;
+    creation_area.onclick = function() {
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+              //Logging :: button-click interaction
+              if(!created){log_click({itime: 2,message:"Creation area clicked (before creation)", register : log, level:1,type:"ImageClick"});}
+              // --------------------------------------------------------------------------
+    }
+    var creation_area = document.getElementById('creation-area-title');
+    creation_area.onclick = function() {
+        // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+        //Logging :: button-click interaction
+        log_click({itime: 2,message:"Creation area title clicked", register : log, level:1,type:"TextClick"});
+        // --------------------------------------------------------------------------
+    }
+    
+
     $('#formid').submit(function(e){
         e.preventDefault();
         document.querySelector('#submit-btn').disabled = true;
@@ -117,13 +204,14 @@
             
             //alert(json1.url + window.location.search);
 
-            fetch(json1.url + "?user=dynamic_user")
+            fetch(json1.url + "?user=dynamic_user&import_trackers=false")
             .then(function (response1) {
                 return response1.json();
             })
             .then(function (myJson) {
                 document.querySelector("#incr-creation").innerHTML = myJson.html;
-                $(myJson.html).appendTo(document.body);    
+                $(myJson.html).appendTo(document.body);   
+                created=true; 
             })
             .catch(function (error) {
                 console.log("Error: " + error);
@@ -152,9 +240,22 @@
                                         '<label for="locked_html">Locked Content:</label>'+
                                     '</div>'+
                                     '<div class="col-sm-3" style="background-color:white;">'+
-                                        '<input type="text" name="locked_html" id="lck-html"  size="10"></p>'+
+                                        '<input type="text" name="locked_html" id="lck-html" size="10"></p>'+
                                     '</div>'+
                                 '</div>';
+                var input5 = document.getElementById("lck-html");
+                input5.onfocusin = function(){
+                    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                    //Logging :: input-in interaction
+                    log_input({itime: 2,message:"Input field 'Locked HTML' focused in", register : log, level:1,type:"InputIn"});
+                    // --------------------------------------------------------------------------
+                    }
+                input5.onfocusout = function(){
+                    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                    //Logging :: input-in interaction
+                    log_input({itime: 2,message:"Input field 'Locked HTML' focused out", register : log, level:1,type:"InputOut"});
+                    // --------------------------------------------------------------------------
+                    }
             }             
         })
         .catch(function (error) {

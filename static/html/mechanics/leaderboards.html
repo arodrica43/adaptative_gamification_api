@@ -11,6 +11,15 @@
 </div>
 
 <script>
+
+    //INTERACTION INIT -----------------------------------------------------------------------
+    //Dynamic property :: Log tracking functions
+    include-base-tracking
+    include-onclick-tracking
+    start_main_time();
+    start_focus_time("main-lb-content-dynamic_index");
+    start_logs(log,"dynamic_user", "dynamic_mechanic_index",15);
+    // ---------------------------------------------------------------------------------------
     document.querySelector("#waiting-div").innerHTML = '<img id="waiting" src="https://i.pinimg.com/originals/23/35/32/23353292cc60b2bcb3f015ee362eeb74.gif"  width=250/>'; 
     fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechanic url
         .then(function (response) {
@@ -31,11 +40,20 @@
             function populateTable(item, index) {
                 //alert(myJson.user.email );
                 document.querySelector("#t-incr-dynamic_index").innerHTML += 
-                    "<tr>" + 
+                    "<tr id='row-element-dynamic_index-" + index + "'>" + 
                         "<td>" + item + "</td>" + 
                         "<td>" + scores[index] + "</td>" + 
                     "</tr>";
-            }   
+            }
+            users.forEach(function(item,index){
+                document.querySelector("#row-element-dynamic_index-" + index).onclick = function(){
+                    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                    //Logging :: button-click interaction
+                    log_click({itime: 2, message:"User at row " + index + " clicked", register : log, level:1,type:"TextClick"});
+                    // --------------------------------------------------------------------------
+                }
+            });
+
         })
         .catch(function (error) {
             console.log("Error: " + error);

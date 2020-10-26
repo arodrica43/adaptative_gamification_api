@@ -28,5 +28,5 @@ class JSONSerializerField(serializers.JSONField):
             return res
         else: return None
     def to_representation(self, value):
-        print("value",json.loads(json.dumps(value)))
+        #print("value",json.loads(json.dumps(value)))
         return self.json_dict(value)

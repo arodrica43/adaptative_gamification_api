@@ -51,119 +51,169 @@
 
 </style>
 
-<div style="text-align:center">
-  <h2 id = "header-pts"></h2>     
-  <param id="comp" value="">  
-</div>
-    
-<div class="container-fluid" style="width:60%; margin: 0 auto">
-    <div class="container-fluid" >
-        <div class= "row">
-
-            <div class="container-fluid" style="width:100%;">
-                <div id="prof-image-stat" style="float:left;margin-right:100px; width:20%;">            
-                    
+<div id="main-content-sstat">
+    <div style="text-align:center">
+        <h2 id = "header-pts"></h2>     
+        <param id="comp" value="">  
+    </div>
+    <div class="container-fluid" style="width:80%; margin: 0 auto; ">
+        <div class="container-fluid" >
+            <div class= "row">
+                <div class="container-fluid" style="width:100%;font-size:calc(1em + 0.5vw);">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div id="prof-image-stat" style="text-align:center;"></div>
+                        </div>
+                        <div class="col-md-7" id ="user-status-data">
+                        </div>
+                    </div>
                 </div>
-                <h3>
-                    
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="following-label" class="col-md-6" style="padding=30px;"><b></b></div>
-                            <div id="following" class="col-md-6" style="padding=30px; padding-left:30px;"></div>
-                        </div>
-                    </div>
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="followers-label" class="col-md-7" style="padding=40px;"><b></b></div>
-                            <div id="followers" class="col-md-5" style="padding=40px;"></div>
-                        </div>
-                    </div>
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="views-label"class="col-md-6" style="padding=40px;"><b></b></div>
-                            <div id="views" class="col-md-6" style="padding=40px;"></div>
-                        </div>
-                    </div>
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="score-label" class="col-md-6" style="padding=30px;"><b></b></div>
-                            <div id="score" class="col-md-6" style="padding=30px;"></div>
-                        </div>
-                    </div>
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="level-label" class="col-md-6" style="padding=30px;"><b></b></div>
-                            <div id="level" class="col-md-6" style="padding=30px;"></div>
-                        </div>
-                    </div>
-                    <div style="float:left;padding:30px;">
-                        <div class="row">
-                            <div id="coin-label" class="col-md-6" style="padding=30px;"><b></b></div>
-                            <div id="coin" class="col-md-6" style="padding=30px;"></div>
-                        </div>
-                    </div>
-                </h3>
             </div>
         </div>
-
+        <div class="container-fluid" style="padding-top:30px;" id="tab-container-content"></div>
+        <div class="container-fluid"> 
+            <div class="row" >
+                <div id="TopFriendly" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-friendly"> <div id="incr-top-friendly"></div></div>
+                </div>
+                <div id="TopFollowed" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-followed"><div id="incr-top-followed"></div></div>
+                </div>
+                <div id="TopViews" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-views"><div id="incr-top-views"></div></div>
+                </div>
+                <div id="TopScore" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-score"><div id="incr-top-score"></div></div>
+                </div>
+                <div id="TopLevel" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-level"><div id="incr-top-level"></div></div>
+                </div>
+                <div id="TopCoin" class="mytabcontent" style="text-align:center;width:100%;">
+                    <div class="scrollable-content" id ="scrollable-content-coin"><div id="incr-top-coin"></div></div>
+                </div>
+            </div> 
+        </div>  
     </div>
-        
+</div>
 
-    <div class="container-fluid">   
-        <div class="row">
-            <div class="mytab" style="width:100%;" id ="tabbuttons">
-                
-            </div>
-        </div>
-    </div>
 
-    <div class="container-fluid"> 
-        <div class="row" >
-            <div id="TopFriendly" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"> <div id="incr-top-friendly"></div></div>
-                <script>
+<script>
+//INTERACTION INIT -----------------------------------------------------------------------
+  //Dynamic property :: Log tracking functions
+  include-base-tracking
+  include-onclick-tracking
+  start_main_time();
+  start_focus_time("main-content-sstat");
+  start_logs(log,"dynamic_user", "dynamic_mechanic_index",15)
+  // ---------------------------------------------------------------------------------------
 
-                    document.querySelector("#tabbuttons").innerHTML = '<button class="mytablinks" onclick="openTab(event, \'TopFriendly\')" id="defaultOpen" style="width:16.666%;height:100px;">Top Friendly</button>'+
-                                                                            '<button class="mytablinks" onclick="openTab(event, \'TopFollowed\')"  style="width:16.666%; height:100px; ">Top Socializer</button>'+
-                                                                            '<button class="mytablinks" onclick="openTab(event, \'TopViews\')" style="width:16.666%;height:100px;">Top Popular</button>'+
-                                                                            '<button class="mytablinks" onclick="openTab(event, \'TopScore\')" id="defaultOpen" style="width:16.666%; height:100px; ">Top Scores</button>'+
-                                                                            '<button class="mytablinks" onclick="openTab(event, \'TopLevel\')" style="width:16.666%;height:100px; ">Top Levels</button>'+
-                                                                            '<button class="mytablinks" onclick="openTab(event, \'TopCoin\')" style="width:16.666%;height:100px; ">Top $</button>';
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/14/?user=dynaimic_user&show_title=false&dynamic_index=friendly")
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then(function (myJson) {
-                            document.querySelector("#incr-top-friendly").innerHTML = (myJson.html);
-                            $(myJson.html).appendTo(document.body);    
-                        })
-                        .catch(function (error) {
-                            console.log("Error: " + error);
-                        });
-                </script>
-            </div>
+// LEADERBOARDS EMBEDDING
 
-            <div id="TopFollowed" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"><div id="incr-top-followed"></div></div>
-                <script>
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/15/?user=dynaimic_user&show_title=false&dynamic_index=followed")
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then(function (myJson) {
-                            document.querySelector("#incr-top-followed").innerHTML = (myJson.html);
-                            $(myJson.html).appendTo(document.body);    
-                        })
-                        .catch(function (error) {
-                            console.log("Error: " + error);
-                        });
-                </script>
-            </div>
+document.querySelector("#user-status-data").innerHTML = '<div class = "container-fluid" id="prof-image-stat" style="background:whitesmoke;margin-top:20px;padding-top:20px;padding-bottom:20px;">'+
+                                                            '<div class="row">'+
+                                                                '<div class="col-md-4" >'+
+                                                                    '<div id="following-label"  style="text-align:center;"><b></b></div>'+
+                                                                    '<div id="following" style="text-align:center;" ></div>'+
+                                                                '</div>'+
+                                                                '<div class="col-md-4">'+
+                                                                    '<div id="followers-label"  style="text-align:center;" ><b></b></div>'+
+                                                                    '<div id="followers"  style="text-align:center;"></div>'+
+                                                                '</div>'+
+                                                                '<div class="col-md-4">'+
+                                                                    '<div id="views-label"  style="text-align:center;"><b></b></div>'+
+                                                                        '<div id="views"  style="text-align:center;"></div>'+
+                                                                '</div>'+
+                                                            '</div>'+
+                                                            '<hr>'+
+                                                            '<div class="row">'+
+                                                                '<div class="col-md-4">'+
+                                                                    '<div id="score-label"  style="text-align:center;"><b></b></div>'+
+                                                                    '<div id="score" style="text-align:center;" ></div>'+
+                                                                '</div>'+
+                                                                '<div class="col-md-4">'+
+                                                                    '<div id="level-label"  style="text-align:center;" ><b></b></div>'+
+                                                                    '<div id="level"  style="text-align:center;"></div>'+
+                                                                '</div>'+
+                                                                '<div class="col-md-4">'+
+                                                                    '<div id="coin-label"  style="text-align:center;"><b></b></div>'+
+                                                                    '<div id="coin"  style="text-align:center;"></div>'+
+                                                                '</div>'+
+                                                            '</div>'+
+                                                        '</div>';
 
-            <div id="TopViews" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"><div id="incr-top-views"></div></div>
-                <script>
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/16/?user=dynaimic_user&show_title=false&dynamic_index=views")
+document.querySelector("#tab-container-content").innerHTML = '<div class="row">'+
+                                                                    '<div class="mytab" style="width:100%;" id ="tabbuttons">'+
+                                                                    '</div>'+
+                                                                '</div>';
+
+document.querySelector("#tabbuttons").innerHTML = '<button class="mytablinks" onclick="openTab(event, \'TopFriendly\')" id="defaultOpen" style="width:16.666%;height:100px;">Top Friendly</button>'+
+                                                        '<button class="mytablinks" onclick="openTab(event, \'TopFollowed\')"  style="width:16.666%; height:100px; ">Top Socializer</button>'+
+                                                        '<button class="mytablinks" onclick="openTab(event, \'TopViews\')" style="width:16.666%;height:100px;">Top Popular</button>'+
+                                                        '<button class="mytablinks" onclick="openTab(event, \'TopScore\')"  style="width:16.666%; height:100px; ">Top Scores</button>'+
+                                                        '<button class="mytablinks" onclick="openTab(event, \'TopLevel\')" style="width:16.666%;height:100px; ">Top Levels</button>'+
+                                                        '<button class="mytablinks" onclick="openTab(event, \'TopCoin\')" style="width:16.666%;height:100px; ">Top $</button>';
+
+document.querySelector("#scrollable-content-friendly").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopFriendly' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content-followed").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopFollowed' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content-views").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopViewed' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content-score").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopScore' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content-level").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopLevel' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+document.querySelector("#scrollable-content-coin").onscroll = function(){
+            // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+            //Logging :: button-click interaction
+            log_click({itime: 2,message:"Scrolling 'TopCoins' leaderboard", register : log, level:1,type:"Scroll"});
+            // --------------------------------------------------------------------------
+        }
+
+fetch("http://127.0.0.1:8080/api/g_mechanics/14/?user=dynaimic_user&show_title=false&dynamic_index=friendly")
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (myJson) {
+        document.querySelector("#incr-top-friendly").innerHTML = (myJson.html);
+        $(myJson.html).appendTo(document.body);    
+    })
+    .catch(function (error) {
+        console.log("Error: " + error);
+    });
+
+fetch("http://127.0.0.1:8080/api/g_mechanics/15/?user=dynaimic_user&show_title=false&dynamic_index=followed")
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (myJson) {
+                    document.querySelector("#incr-top-followed").innerHTML = (myJson.html);
+                    $(myJson.html).appendTo(document.body);    
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+fetch("http://127.0.0.1:8080/api/g_mechanics/16/?user=dynaimic_user&show_title=false&dynamic_index=views")
                         .then(function (response) {
                             return response.json();
                         })
@@ -174,28 +224,18 @@
                         .catch(function (error) {
                             console.log("Error: " + error);
                         });
-                </script>
-            </div>
-            <div id="TopScore" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"><div id="incr-top-score"></div></div>
-                <script>
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/11/?user=dynaimic_user&show_title=false&dynamic_index=score")
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then(function (myJson) {
-                            document.querySelector("#incr-top-score").innerHTML = (myJson.html);
-                            $(myJson.html).appendTo(document.body);    
-                        })
-                        .catch(function (error) {
-                            console.log("Error: " + error);
-                        });
-                </script>
-            </div>
-            <div id="TopLevel" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"><div id="incr-top-level"></div></div>
-                <script>
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/12/?user=dynaimic_user&show_title=false&dynamic_index=level")
+fetch("http://127.0.0.1:8080/api/g_mechanics/11/?user=dynaimic_user&show_title=false&dynamic_index=score")
+                            .then(function (response) {
+                                return response.json();
+                            })
+                            .then(function (myJson) {
+                                document.querySelector("#incr-top-score").innerHTML = (myJson.html);
+                                $(myJson.html).appendTo(document.body);    
+                            })
+                            .catch(function (error) {
+                                console.log("Error: " + error);
+                            });
+fetch("http://127.0.0.1:8080/api/g_mechanics/12/?user=dynaimic_user&show_title=false&dynamic_index=level")
                         .then(function (response) {
                             return response.json();
                         })
@@ -206,13 +246,7 @@
                         .catch(function (error) {
                             console.log("Error: " + error);
                         });
-                </script>
-            </div>
-            
-            <div id="TopCoin" class="mytabcontent" style="text-align:center;width:100%;">
-                <div class="scrollable-content"><div id="incr-top-coin"></div></div>
-                <script>
-                    fetch("http://127.0.0.1:8080/api/g_mechanics/13/?user=dynaimic_user&show_title=false&dynamic_index=coin")
+ fetch("http://127.0.0.1:8080/api/g_mechanics/13/?user=dynaimic_user&show_title=false&dynamic_index=coin")
                         .then(function (response) {
                             return response.json();
                         })
@@ -223,23 +257,16 @@
                         .catch(function (error) {
                             console.log("Error: " + error);
                         });
-                </script>
-            </div>
-        </div> 
-    </div>  
-</div>
 
-
-<script>
     fetch("http://127.0.0.1:8080/api/gamers/dynamic_user/")
         .then(function (response) {
             return response.json();
         })
         .then(function (myJson) {
-            document.querySelector("#prof-image-stat").innerHTML = '<hr><img id = "profile-image-stat" src="http://127.0.0.1:8080/media/social_icons/' + myJson.social_profile.image + '.png" id="friend-profile-img" style="width:200%;max-width:200px;min-width:50px;" />'+
+            document.querySelector("#prof-image-stat").innerHTML = '<hr><img id = "profile-image-stat" src="http://127.0.0.1:8080/media/social_icons/' + myJson.social_profile.image + '.png" id="friend-profile-img" />'+
                                                                 '<h2 id="uname-stat" style="margin-top:30px; text-align:center;"></h2><hr>';
             document.querySelector("#following-label").innerHTML = "<b>Following</b>";
-            document.querySelector("#followers-label").innerHTML = "<b>Followers  &nbsp;</b>";
+            document.querySelector("#followers-label").innerHTML = "<b>Followers</b>";
             document.querySelector("#views-label").innerHTML = "<b>Views</b>";
             document.querySelector("#score-label").innerHTML = "<b>Score</b>";
             document.querySelector("#level-label").innerHTML = "<b>Level</b>";
@@ -253,16 +280,103 @@
             document.querySelector("#score").innerHTML = myJson.gamer_profile.data.score;
             document.querySelector("#level").innerHTML = myJson.gamer_profile.data.level;
             document.querySelector("#coin").innerHTML = myJson.gamer_profile.data.$;
+
+            document.querySelector("#following-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label 'Following' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#followers-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label 'Followers' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#views-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label 'Views' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#score-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label 'Score' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#level-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label 'Level' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#coin-label").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Label '$' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+
+            document.querySelector("#uname-stat").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Username text clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#profile-image-stat").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Avatar image clicked", register : log, level:1,type:"ImageClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#following").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of 'Following' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#followers").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of 'Followers' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#views").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of 'Views' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#score").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of 'Score' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#level").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of 'Level' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
+            document.querySelector("#coin").onclick = function(){
+              // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+                //Logging :: button-click interaction
+                log_click({itime: 1, message:"Value of '$' clicked", register : log, level:1,type:"TextClick"});
+                // --------------------------------------------------------------------------
+            }
         })
         .catch(function (error) {
             console.log("Error: " + error);
         });
-</script>
-
-
-<script>
 
 function openTab(evt, tabName) {
+
+  // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: button-click interaction
+    log_click({itime: 1, message:"Tab button '" + tabName + "' clicked", register : log, level:1,type:"ButtonClick"});
+    // --------------------------------------------------------------------------
 
   var i, mytabcontent, mytablinks;
   mytabcontent = document.getElementsByClassName("mytabcontent");
@@ -291,6 +405,7 @@ document.getElementById("defaultOpen").click();
         .catch(function (error) {
             console.log("Error: " + error);
         });
+
 </script> 
 
 

@@ -93,13 +93,13 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         else: data_data = {"level":0,"score":0,"$":0,"badges":[],"unlockables":[],"challenges":[], "gifts" : []}
         
         gprofile = GamerProfile.objects.create(disruptor = disruptor_data,
-                                                                        free_spirit =  free_spirit_data,
-                                                                        achiever =  achiever_data,
-                                                                        player =  player_data,
-                                                                        socializer =  socializer_data,
-                                                                        philantropist =  philantropist_data,
-                                                                        no_player =  no_player_data,
-                                                                        data = data_data)
+                                                free_spirit =  free_spirit_data,
+                                                achiever =  achiever_data,
+                                                player =  player_data,
+                                                socializer =  socializer_data,
+                                                philantropist =  philantropist_data,
+                                                no_player =  no_player_data,
+                                                data = data_data)
 
         if 'valence' in emotion_profile_data.keys(): valence_data = emotion_profile_data['valence']
         else: valence_data = 0
@@ -107,7 +107,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         else: arousal_data = 1
         
         eprofile = EmotionProfile.objects.create(valence = valence_data,
-                                                                            arousal =  arousal_data)
+                                                arousal =  arousal_data)
 
 
         if 'image' in social_profile_data.keys():
@@ -117,10 +117,10 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         sprofile = SocialProfile.objects.create(image = image_data,data = {"friends":[],"followers":0, "views":0})
         
         gamer = Gamer.objects.create(user = user, 
-                                                        emotion_profile = eprofile,
-                                                        gamer_profile = gprofile,
-                                                        social_profile = sprofile
-                                                        )
+                                    emotion_profile = eprofile,
+                                    gamer_profile = gprofile,
+                                    social_profile = sprofile
+                                    )
         return gamer
         # except IntegrityError as error:
         #     print(error)
@@ -128,8 +128,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         #     return Gamer()
    
     def update(self, instance, validated_data):
-
-        
+   
         val = validated_data.get('user')['username']
         if 'groups' in validated_data.get('user'):
             grps = validated_data.get('user')['groups']
@@ -140,8 +139,6 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         gamer_profile_data = validated_data.pop('gamer_profile')
         emotion_profile_data = validated_data.pop('emotion_profile')
         social_profile_data = validated_data.pop('social_profile')
-
-        
 
         if 'disruptor' in gamer_profile_data.keys(): disruptor_data = gamer_profile_data['disruptor']
         else: disruptor_data = instance.gamer_profile.disruptor
@@ -210,6 +207,7 @@ class InteractionStatisticSerializer(serializers.HyperlinkedModelSerializer):
     #mechanic = serializers.SerializerMethodField(read_only = False)
     #user = GamerSerializer()
     #user = serializers.SerializerMethodField()
+    log = fields.JSONSerializerField(read_only = True)
 
     def get_user(self, obj):
         # obj is model instance
@@ -221,18 +219,18 @@ class InteractionStatisticSerializer(serializers.HyperlinkedModelSerializer):
         
     class Meta:
         model = InteractionStatistic
-        fields = ['url', 'mechanic','user','interaction_index']
+        fields = ['url', 'mechanic','user', 'log','interaction_index']
         #read_only_fields =
              
         
 class GMechanicSerializer(EnumFieldSerializerMixin,serializers.HyperlinkedModelSerializer):
     mechanic_type = fields.EnumField(enum=models.GMechanic.MechanicType, read_only = True)
     
-    statistics = InteractionStatisticSerializer(many = True, read_only = True)
+    #statistics = InteractionStatisticSerializer(many = True, read_only = True)
     class Meta:
         model = GMechanic
-        fields = ['url','id','title','mechanic_type','html','statistics']
-        read_only_fields = ('statistics','html',)
+        fields = ['url','id','title','mechanic_type','html']
+        read_only_fields = ('html',)
         depth = 2
 
     def create(self, validated_data):

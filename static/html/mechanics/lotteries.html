@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div style="text-align:center;" id="main-content-lot">
   <h2 id = "header-lot"></h2>     
    <div id="button_div"></div>
    <div id="roulette_div"></div> 
@@ -65,8 +65,23 @@ fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechan
 
 <script>
 
+  //INTERACTION INIT -----------------------------------------------------------------------
+    //Dynamic property :: Log tracking functions
+    include-base-tracking
+    include-onclick-tracking
+    start_main_time();
+    start_focus_time("main-content-lot");
+    start_logs(log,"dynamic_user", "dynamic_mechanic_index",15);
+    // ---------------------------------------------------------------------------------------
+
   document.querySelector("#button_div").innerHTML = '<br><br><input type="button" value="spin" id="spin" />';
-  document.querySelector("#roulette_div").innerHTML = ' <canvas id="canvas" width="400" height="420"></canvas>'
+  document.querySelector("#roulette_div").innerHTML = ' <canvas id="canvas" width="400" height="420"></canvas>';
+  document.querySelector("#roulette_div").onclick = function(){
+    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: button-click interaction
+    log_click({itime: 2, message:"Roulette image clicked", register : log, level:1,type:"ImageClick"});
+    // --------------------------------------------------------------------------
+  }
 
   //Options and Arc are dynamically charged through <param>
 
@@ -107,12 +122,6 @@ fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechan
 
     var options  = JSON.parse(document.querySelector("#options").value);
     var arc = Math.PI / (options.length / 2);
-
-      //alert("ula");
-    
-    //alert(options);
-    
-  
     var canvas = document.getElementById("canvas");
     if (canvas.getContext) {
       var outsideRadius = 150;
@@ -170,6 +179,10 @@ fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechan
   }
 
   function spin() {
+    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
+    //Logging :: button-click interaction
+    log_click({itime: 1, message:"Spin button clicked", register : log, level:1,type:"ButtonClick"});
+    // --------------------------------------------------------------------------
     spinAngleStart = Math.random() * 10 + 10;
     spinTime = 0;
     spinTimeTotal = Math.random() * 3 + 4 * 1000;
@@ -200,32 +213,18 @@ fetch("called_mechanic_url") // WARNING: should be replaced by a concrete mechan
     ctx.font = 'bold 30px Helvetica, Arial';
     var text = options[index]
     ctx.fillText(text, 200 - ctx.measureText(text).width / 2, 200 + 10);
-
-
+    
       fetch("called_mechanic_url&prize=" + text) // WARNING: should be replaced by a concrete mechanic url
         .then(function (response) {
           //alert("entering");
             return response.json();
         })
         .then(function (myJson) {
-            //document.querySelector("#mechanic_html").innerHTML = myJson.html;
-            //$(myJson.html).appendTo(document.body); // WARNING:  enabling this turns into a recursive call to server
-            //document.querySelector("#score").innerHTML = "Your " + myJson.given_by + " is " + myJson.score ;
-            //document.querySelector("#uname").innerHTML = "Username: " + myJson.user ;
-            
-            //Render modal with prize feedback :: DISABLED
-            // modal.style.display = "block";
-            //document.querySelector("#prize-modal").innerHTML = '<h2 style = "text-align:center">You won ' + text + ' ' + myJson.by + '</h2>';
-
-              
-             
+            alert("You win " + text + " " + myJson.by);
         })
         .catch(function (error) {
             console.log("Error: " + error);
         }); 
-
-    
-
     ctx.restore();
   }
 
