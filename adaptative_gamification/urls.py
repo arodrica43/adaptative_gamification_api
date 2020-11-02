@@ -23,6 +23,7 @@ from adaptative_gamification import settings
 
 urlpatterns = [
     path('',  views.index),
+    path('adaptative_statistics',views.adaptative_statistics),
     path('js_test/', views.js_test),
     #path('examples/adaptative-mechanic/random/',  views.adaptative_mechanic_example),
     #path('examples/adaptative-mechanic/matrix/',  views.adaptative_mechanic_example_matrix),

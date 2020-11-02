@@ -9,6 +9,10 @@ from django.template.response import TemplateResponse
 from drf_enum_field.serializers import EnumFieldSerializerMixin
 from rest_framework.exceptions import ValidationError
 
+import threading
+lock = threading.Lock()
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -40,7 +44,6 @@ class SocialProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = SocialProfile
         fields = ['url', 'image', 'description','data']
 
-
 class GamerSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer()
     gamer_profile = GamerProfileSerializer()
@@ -53,7 +56,6 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         #try:
-        
         user_data = validated_data.pop('user')
 
        
@@ -68,6 +70,7 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         #user.set_password(validated_data.get('username'))
         user.save()
         #print(validated_data)
+
         gamer_profile_data = validated_data.pop('gamer_profile')
         emotion_profile_data = validated_data.pop('emotion_profile')
         social_profile_data = validated_data.pop('social_profile')
@@ -120,7 +123,9 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
                                     emotion_profile = eprofile,
                                     gamer_profile = gprofile,
                                     social_profile = sprofile
-                                    )
+                                    )         
+        for gm in GMechanic.objects.all():
+            InteractionStatistic.objects.update_or_create(mechanic = gm, user = user.username, interaction_index = 1e-2)
         return gamer
         # except IntegrityError as error:
         #     print(error)
@@ -128,7 +133,6 @@ class GamerSerializer(serializers.HyperlinkedModelSerializer):
         #     return Gamer()
    
     def update(self, instance, validated_data):
-   
         val = validated_data.get('user')['username']
         if 'groups' in validated_data.get('user'):
             grps = validated_data.get('user')['groups']
@@ -235,15 +239,20 @@ class GMechanicSerializer(EnumFieldSerializerMixin,serializers.HyperlinkedModelS
 
     def create(self, validated_data):
         # create default gmechanic instance
-        instance = super().create(validated_data)
+        lock.acquire()
+        try:
+            instance = super().create(validated_data)
 
-        # Create default statistics for all users 
+            # Create default statistics for all users 
 
-        users = Gamer.objects.all()
-        for u in users:
-            InteractionStatistic.objects.update_or_create(mechanic = instance, user = u.user.username, interaction_index = 1)
-
-        return instance
+            users = Gamer.objects.all()
+            for u in users:
+                InteractionStatistic.objects.update_or_create(mechanic = instance, user = u.user.username, interaction_index = 1e-2)
+            lock.release()
+            return instance
+        except:
+            lock.release()
+            raise Http404
         
 
 class DevelopmentToolSerializer(GMechanicSerializer):

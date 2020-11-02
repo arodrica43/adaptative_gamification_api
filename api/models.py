@@ -389,4 +389,19 @@ class GComponent(models.Model):
             
 mechanics_list = [Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard]
 mechanics_list_names = ['adaptatives','badges', 'challenges', 'development_tools', 'easter_eggs', 'gifts', 'gift_openers', 'knowledge_shares', 'levels', 'lotteries', 'points', 'social_networks', 'social_statuses', 'unlockables', 'leaderboards']
-
+mechanic_list_total_interactions = {
+    'badges':9, 
+    'challenges':9, 
+    'development_tools':30, 
+    'easter_eggs':2, 
+    'gifts':30, 
+    'gift_openers':10, 
+    'knowledge_shares':6, 
+    'levels':2, 
+    'lotteries':2, 
+    'points':1, 
+    'social_networks':35, 
+    'social_statuses':20, 
+    'unlockables':10, 
+    'leaderboards':5
+}

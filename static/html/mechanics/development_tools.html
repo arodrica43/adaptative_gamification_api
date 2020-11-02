@@ -90,13 +90,13 @@
                                                                 '</div>';
 
     var input1 = document.getElementById("fname");
-    input1.onfocusin = function(){
+    input1.onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Name' focused in", register : log, level:1,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-    input1.onfocusout = function(){
+    input1.onblur = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-out interaction
         log_input({itime: 2,message:"Input field 'Name' focused out", register : log, level:1,type:"InputOut"});
@@ -104,26 +104,26 @@
         }
 
     var input2 = document.getElementById("lname");
-    input2.onfocusin = function(){
+    input2.onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Description' focused in", register : log, level:1,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-    input2.onfocusout = function(){
+    input2.onblur = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-out interaction
         log_input({itime: 2,message:"Input field 'Description' focused out", register : log, level:1,type:"InputOut"});
         // --------------------------------------------------------------------------
         }
     var input3 = document.getElementById("cars");
-    input3.onfocusin = function(){
+    input3.onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Unlock by' focused in", register : log, level:1,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-    input3.onfocusout = function(){
+    input3.onblur = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-out interaction
         log_input({itime: 2,message:"Input field 'Unlock by' focused out", register : log, level:1,type:"InputOut"});
@@ -131,13 +131,13 @@
         }
 
     var input4 = document.getElementById("threshold");
-    input4.onfocusin = function(){
+    input4.onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Threshold' focused in", register : log, level:1,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-    input4.onfocusout = function(){
+    input4.onblur = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-out interaction
         log_input({itime: 2,message:"Input field 'Threshold' focused out", register : log, level:1,type:"InputOut"});
@@ -165,11 +165,10 @@
         log_click({itime: 2,message:"Creation area title clicked", register : log, level:1,type:"TextClick"});
         // --------------------------------------------------------------------------
     }
-    
+    //document.querySelector('#submit-btn').disabled = true;
 
     $('#formid').submit(function(e){
         e.preventDefault();
-        document.querySelector('#submit-btn').disabled = true;
         //alert(decodeURI($('#formid').serialize()));
         var json0 = JSON.parse('{"' + decodeURI($('#formid').serialize()).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"').replace(/\+/g,' ') + '"}');
         //alert(document.querySelector('#gtype').value);
@@ -244,13 +243,13 @@
                                     '</div>'+
                                 '</div>';
                 var input5 = document.getElementById("lck-html");
-                input5.onfocusin = function(){
+                input5.onfocus = function(){
                     // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
                     //Logging :: input-in interaction
                     log_input({itime: 2,message:"Input field 'Locked HTML' focused in", register : log, level:1,type:"InputIn"});
                     // --------------------------------------------------------------------------
                     }
-                input5.onfocusout = function(){
+                input5.onblur = function(){
                     // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
                     //Logging :: input-in interaction
                     log_input({itime: 2,message:"Input field 'Locked HTML' focused out", register : log, level:1,type:"InputOut"});

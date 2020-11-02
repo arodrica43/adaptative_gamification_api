@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from api.serializers import AdaptativeSerializer, InteractionStatisticSerializer, BadgeSerializer, ChallengeSerializer, DevelopmentToolSerializer, EasterEggSerializer, GiftSerializer, GiftOpenerSerializer, KnowledgeShareSerializer, LevelSerializer, LotterySerializer, PointSerializer, SocialNetworkSerializer, SocialStatusSerializer, UnlockableSerializer, LeaderboardSerializer, UserSerializer, GroupSerializer, GamerSerializer, GMechanicSerializer, GComponentSerializer , GamerProfileSerializer, EmotionProfileSerializer, SocialProfileSerializer
+from api.serializers import lock, AdaptativeSerializer, InteractionStatisticSerializer, BadgeSerializer, ChallengeSerializer, DevelopmentToolSerializer, EasterEggSerializer, GiftSerializer, GiftOpenerSerializer, KnowledgeShareSerializer, LevelSerializer, LotterySerializer, PointSerializer, SocialNetworkSerializer, SocialStatusSerializer, UnlockableSerializer, LeaderboardSerializer, UserSerializer, GroupSerializer, GamerSerializer, GMechanicSerializer, GComponentSerializer , GamerProfileSerializer, EmotionProfileSerializer, SocialProfileSerializer
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, Http404
-from api.models import mechanics_list, mechanics_list_names, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GMechanic, GComponent, GamerProfile, EmotionProfile, SocialProfile
+from api.models import mechanics_list, mechanics_list_names,mechanic_list_total_interactions, InteractionStatistic, Adaptative, Badge, Challenge, DevelopmentTool, EasterEgg, Gift, GiftOpener, KnowledgeShare, Level, Lottery, Point, SocialNetwork, SocialStatus, Unlockable, Leaderboard, Gamer, GMechanic, GComponent, GamerProfile, EmotionProfile, SocialProfile
 from django.template.response import TemplateResponse
 from rest_framework.response import Response
 import numpy as np
@@ -12,14 +12,17 @@ import os
 from django.conf import settings
 
 import threading
-lock = threading.Lock()
 lock2 = threading.Lock()
 lock3 = threading.Lock()
 lock4 = threading.Lock()
 lock5 = threading.Lock()
+lock6 = threading.Lock()
+lock7 = threading.Lock()
+lock8 = threading.Lock()
 
 interaction_files = [("include-onclick-tracking","onclick.js"), 
                      ("include-base-tracking","default.js"), 
+                     ("include_interaction_testing_tools","interaction_testing.js")
                     ]
 
 def js_test(request):
@@ -125,6 +128,24 @@ def index(request):
     users = Gamer.objects.all()
     #request.GET.get('id', '')
     return TemplateResponse(request, 'index.html', {'users': users})
+    
+
+
+def adaptative_statistics(request):
+    """
+    Landingpage
+    TO DO: Migrate to the main webapp
+    """
+    users = Gamer.objects.all()
+    #request.GET.get('id', '')
+    user = ""
+    existing_user = False
+    if "user" in request.GET.keys():
+        user = Gamer.objects.filter(user__username = request.GET['user'])
+        if user:
+            user = user[0].user.username
+            existing_user = True
+    return TemplateResponse(request, 'adaptative_statistics.html', {'users': users,'user':user, 'existing_user': existing_user})
     
 
 def preview_gmechanic(request, gmechanic_id):
@@ -244,6 +265,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 raise Http404
 
     def update(self, request, *args, **kwargs):
+        #lock8.acquire()
         try:
             instance = self.queryset.get(pk=kwargs.get('pk'))
         except ValueError:
@@ -251,6 +273,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(instance, data=request.data, partial=True,context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        #lock8.release()
         return Response(serializer.data)
 
 class GamerViewSet(viewsets.ModelViewSet):
@@ -288,7 +311,7 @@ class GamerViewSet(viewsets.ModelViewSet):
                 raise Http404
 
     def update(self, request, *args, **kwargs):
-        
+        #lock7.acquire()
         try:
             instance = self.queryset.get(pk=kwargs.get('pk'))
            
@@ -302,7 +325,7 @@ class GamerViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         
         serializer.save()
-        
+        #lock7.release()
         return Response(serializer.data)
 
 class GamerProfileViewSet(viewsets.ModelViewSet):
@@ -354,44 +377,49 @@ class GMechanicViewSet(viewsets.ModelViewSet):
         #print("There?",request.GET.urlencode())
         if pk:
             lock.acquire()
-            #print(self.concrete_model)
-            #main_queryset = self.concrete_model.objects.filter(id=pk)
-            queryset, name = g_mechanic_cast(pk)
-            file = open(os.path.join(settings.TEMPLATES[0]['DIRS'][0],  "mechanics/" + name + '.html'))
-            print("http://127.0.0.1:8080/api/" + name + "/" + pk + "/?" + request.GET.urlencode())
-            queryset.update(html = file.read().replace("called_mechanic_url","http://127.0.0.1:8080/api/" + name + "/" + pk + "/?" + request.GET.urlencode()))
-            queryset.update(html = queryset[0].html.replace("dynamic_mechanic_index", pk))
-            queryset.update(html = queryset[0].html.replace("dynamic_mechanic_name", name))
-            
-
-            # Dynamic properties of a g_mechanic :: dynamic_user
-            #                                       dynamic_index
-            ensamble_interaction_dynamic_properties(queryset)
-            #file = open(os.path.join(settings.TEMPLATES[0]['DIRS'][1],  "interactions/onclick.js"))
-            #queryset.update(html = queryset[0].html.replace("include-onclick-tracking",file.read())) 
-            try:             
-                queryset.update(html = queryset[0].html.replace("dynamic_user",request.GET['user']))
-            except:
-                print("Query url doesn't contain username argument")
-            try:             
-                queryset.update(html = queryset[0].html.replace("dynamic_index",request.GET['dynamic_index']))
-            except:
-                print("Query url doesn't contain dynamic_index argument")
+            try:
+                #print(self.concrete_model)
+                #main_queryset = self.concrete_model.objects.filter(id=pk)
+                queryset, name = g_mechanic_cast(pk)
+                file = open(os.path.join(settings.TEMPLATES[0]['DIRS'][0],  "mechanics/" + name + '.html'))
+                print("http://127.0.0.1:8080/api/" + name + "/" + pk + "/?" + request.GET.urlencode())
+                queryset.update(html = file.read().replace("called_mechanic_url","http://127.0.0.1:8080/api/" + name + "/" + pk + "/?" + request.GET.urlencode()))
+                queryset.update(html = queryset[0].html.replace("dynamic_mechanic_index", pk))
+                queryset.update(html = queryset[0].html.replace("dynamic_mechanic_name", name))
                 
 
-            tmp_title = queryset[0].title
-            if 'show_title' in request.GET.keys():
-                #print("Halooo", request.GET['show_title'])
-                st = request.GET['show_title']
-                if st == 'false':
-                    queryset.update(title = "")
-                   
-            self.logic(queryset,request)
-            #print(queryset[0].leadders['user1'])
-            serializer = self.serializer_class(queryset[0], context={'request': request})
-            queryset.update(title = tmp_title)
-            lock.release()   
-            return Response(serializer.data)
+                # Dynamic properties of a g_mechanic :: dynamic_user
+                #                                       dynamic_index
+                ensamble_interaction_dynamic_properties(queryset)
+                #file = open(os.path.join(settings.TEMPLATES[0]['DIRS'][1],  "interactions/onclick.js"))
+                #queryset.update(html = queryset[0].html.replace("include-onclick-tracking",file.read())) 
+                try:             
+                    queryset.update(html = queryset[0].html.replace("dynamic_user",request.GET['user']))
+                except:
+                    print("Query url doesn't contain username argument")
+                try:             
+                    queryset.update(html = queryset[0].html.replace("dynamic_index",request.GET['dynamic_index']))
+                except:
+                    print("Query url doesn't contain dynamic_index argument")
+                    
+
+                tmp_title = queryset[0].title
+                if 'show_title' in request.GET.keys():
+                    #print("Halooo", request.GET['show_title'])
+                    st = request.GET['show_title']
+                    if st == 'false':
+                        queryset.update(title = "")
+                    
+                self.logic(queryset,request)
+                #print(queryset[0].leadders['user1'])
+                serializer = self.serializer_class(queryset[0], context={'request': request})
+                queryset.update(title = tmp_title)
+                lock.release()   
+                return Response(serializer.data)
+            except:
+                lock.release() 
+                ensamble_interaction_dynamic_properties(queryset)
+                raise Http404
         else: 
             return Http404
 
@@ -399,65 +427,75 @@ class GMechanicViewSet(viewsets.ModelViewSet):
         return self.abstract_retrieve(request,pk)
    
     def update(self, request,pk):
-        instance = self.queryset.get(id=pk)
-        data = request.data
-        #print(data)
-        if data['user'] != "dynamic_user":
-            statistic = InteractionStatistic.objects.filter(mechanic = instance, user = data['user'])
-            for arg in ['history', 'main_time', 'focus_time', 'interaction_time','hidden_content_time', 'shown_content_time']:
-                uplog = statistic[0].log
-                if arg in statistic[0].log.keys():
-                    uplog[arg] += data['log'][arg]
-                else: 
-                    uplog[arg] = data['log'][arg]
-                statistic.update(log = uplog)
-            #Interaction index update ----------------------------------------------------------------------------------------------------
-            # for s in InteractionStatistic.objects.all():
-            #     s.log = {}
-            #     s.interaction_index = 0
-            #     s.save()
-            # for u in Gamer.objects.all():
-            #     u.gamer_profile.disruptor = 0
-            #     u.gamer_profile.free_spirit = 0
-            #     u.gamer_profile.achiever = 0
-            #     u.gamer_profile.player = 0
-            #     u.gamer_profile.socializer = 0
-            #     u.gamer_profile.philantropist = 0
-            #     u.gamer_profile.no_player = 0
-            #     u.gamer_profile.save()   
+        lock.acquire()
+        try:
+            instance = self.queryset.get(id=pk)
+            data = request.data
+            #print(data)
+            if data['user'] != "dynamic_user":
+                statistic = InteractionStatistic.objects.filter(mechanic = instance, user = data['user'])
+                for arg in ['history', 'main_time', 'focus_time', 'interaction_time','hidden_content_time', 'shown_content_time']:
+                    uplog = statistic[0].log
+                    if arg in statistic[0].log.keys():
+                        uplog[arg] += data['log'][arg]
+                    else: 
+                        uplog[arg] = data['log'][arg]
+                    statistic.update(log = uplog)
+                #Interaction index update ----------------------------------------------------------------------------------------------------
+                # for s in InteractionStatistic.objects.all():
+                #     s.log = {}
+                #     s.interaction_index = 0
+                #     s.save()
+                # for u in Gamer.objects.all():
+                #     u.gamer_profile.disruptor = 0
+                #     u.gamer_profile.free_spirit = 0
+                #     u.gamer_profile.achiever = 0
+                #     u.gamer_profile.player = 0
+                #     u.gamer_profile.socializer = 0
+                #     u.gamer_profile.philantropist = 0
+                #     u.gamer_profile.no_player = 0
+                #     u.gamer_profile.save()   
 
-            import math
-            n = sum([(0.2*x[0]["level"] + 0.8) for x in statistic[0].log["history"]])
-            l = 4
-            I = 0
-            for t_label in ['main_time', 'focus_time', 'interaction_time']:
-                I += 1 - math.exp(-l*(n/(statistic[0].log[t_label] + 1e-100)))
-            I = I/3
-            statistic.update(interaction_index = I)
-            #------------------------------------------------------------------------------------------------------------------------------
-            # Gamer profile update --------------------------------------------------------------------------------------------------------
-            current_user = Gamer.objects.filter(user__username = data['user'])
-            if current_user:
-                current_gstate = np.array(current_user[0].gamer_profile.vectorize())
-                current_statistics = np.array(instance.statistics_vector(data['user']))
-                #print("Here",instance.matrix().T.dot(current_statistics))
-                new_gstate = 0.5*(current_gstate + np.linalg.pinv(instance.matrix()).dot(current_statistics))
-                print(new_gstate)
-                current_user[0].gamer_profile.disruptor = new_gstate[0]
-                current_user[0].gamer_profile.free_spirit = new_gstate[1]
-                current_user[0].gamer_profile.achiever = new_gstate[2]
-                current_user[0].gamer_profile.player = new_gstate[3]
-                current_user[0].gamer_profile.socializer = new_gstate[4]
-                current_user[0].gamer_profile.philantropist = new_gstate[5]
-                current_user[0].gamer_profile.no_player = new_gstate[6]
-                current_user[0].gamer_profile.save()                
-            #------------------------------------------------------------------------------------------------------------------------------
-            serializer = self.serializer_class(instance, data=data, partial=True,context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return HttpResponse('Invalid user!')
+                import math
+                _, name = g_mechanic_cast(pk)
+                n = sum([(0.2*x[0]["level"] + 0.8) for x in statistic[0].log["history"]])/mechanic_list_total_interactions[name]
+                l = 4
+                I = 0
+                for t_label in ['main_time', 'focus_time', 'interaction_time']:
+                    I += 1 - math.exp(-l*(n/(statistic[0].log[t_label] + 1e-100)))
+                I = I/3
+                statistic.update(interaction_index = I)
+                #------------------------------------------------------------------------------------------------------------------------------
+                # Gamer profile update --------------------------------------------------------------------------------------------------------
+                current_user = Gamer.objects.filter(user__username = data['user'])
+                if current_user:
+                    current_gstate = np.array(current_user[0].gamer_profile.vectorize())
+                    current_statistics = np.array(instance.statistics_vector(data['user']))
+                    #print("Here",instance.matrix().T.dot(current_statistics))
+                    print(instance.matrix()[:,:len(current_statistics)].shape,len(current_statistics))
+                    new_gstate = 0.5*(current_gstate + np.linalg.pinv(instance.matrix()[:len(current_statistics),:]).dot(current_statistics))
+                    print(new_gstate)
+                    current_user[0].gamer_profile.disruptor = new_gstate[0]
+                    current_user[0].gamer_profile.free_spirit = new_gstate[1]
+                    current_user[0].gamer_profile.achiever = new_gstate[2]
+                    current_user[0].gamer_profile.player = new_gstate[3]
+                    current_user[0].gamer_profile.socializer = new_gstate[4]
+                    current_user[0].gamer_profile.philantropist = new_gstate[5]
+                    current_user[0].gamer_profile.no_player = new_gstate[6]
+                    current_user[0].gamer_profile.save()                
+                #------------------------------------------------------------------------------------------------------------------------------
+                serializer = self.serializer_class(instance, data=data, partial=True,context={'request': request})
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                lock.release()
+                return Response(serializer.data)
+            else:
+                lock.release()
+                return HttpResponse('Invalid user!')  
+        except:
+            lock.release()
+            raise Http404     
+           
 
 class InteractionStatisticViewSet(viewsets.ModelViewSet):
     """
@@ -603,7 +641,7 @@ class BadgeViewSet(GMechanicViewSet):
         return super().abstract_retrieve(request,pk)
 
     def logic(self,queryset,request):
-        #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
+       # I don't know if its necessary, sience we have lock in parent class
         #print("Im hereee")
         if 'user' in request.GET.keys():
             if request.GET['user']:
@@ -649,7 +687,7 @@ class LevelViewSet(GMechanicViewSet):
         return super().abstract_retrieve(request,pk)
 
     def logic(self,queryset,request):
-        #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
+        # I don't know if its necessary, sience we have lock in parent class
         
         if 'user' in request.GET.keys():
             if request.GET['user']:
@@ -694,7 +732,7 @@ class PointViewSet(GMechanicViewSet):
         return super().abstract_retrieve(request,pk)
 
     def logic(self,queryset,request):
-        #lock2.acquire() # I don't know if its necessary, sience we have lock in parent class
+         # I don't know if its necessary, sience we have lock in parent class
         
         if 'user' in request.GET.keys():
             if request.GET['user']:
@@ -929,6 +967,7 @@ class AdaptativeViewSet(GMechanicViewSet):
             file = open(os.path.join(settings.TEMPLATES[0]['DIRS'][0], "mechanics/adaptatives.html"))
             new_html = file.read().replace('called_mechanic_url', "http://127.0.0.1:8080/api/g_mechanics/" + str(5) + "/?" + args.urlencode())
             queryset.update(html = new_html)
+        ensamble_interaction_dynamic_properties(queryset)
 
 
 class AdaptativeUtilitiesViewSet(AdaptativeViewSet):

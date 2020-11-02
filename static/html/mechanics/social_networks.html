@@ -376,13 +376,13 @@ document.querySelector("#friend-descr").onclick = function(){
                 log_click({itime: 1, message:"Friend profile description (profile modal) clicked", register : log, level:2,type:"TextClick"});
                 // --------------------------------------------------------------------------
             }
-document.querySelector("#description-input").onfocusin = function(){
+document.querySelector("#description-input").onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Description' (settings modal) focused in", register : log, level:2,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-document.querySelector("#description-input").onfocusout = function(){
+document.querySelector("#description-input").onblur = function(){
     // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-out interaction
     log_input({itime: 2,message:"Input field 'Description' (settings modal) focused out", register : log, level:2,type:"InputOut"});
@@ -803,13 +803,13 @@ document.querySelector("#show-friends-list-dropdown-button").onclick = function(
         log_click({itime: 1, message:"Open friends list button clicked", register : log, level:1,type:"ButtonClick"});
         // --------------------------------------------------------------------------
     }
-document.querySelector("#search-input-field").onfocusin = function(){
+document.querySelector("#search-input-field").onfocus = function(){
         // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
         //Logging :: input-in interaction
         log_input({itime: 2,message:"Input field 'Search Users' focused in", register : log, level:2,type:"InputIn"});
         // --------------------------------------------------------------------------
         }
-document.querySelector("#search-input-field").onfocusout = function(){
+document.querySelector("#search-input-field").onblur = function(){
     // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-out interaction
     log_input({itime: 2,message:"Input field 'Search Users' focused out", register : log, level:2,type:"InputOut"});

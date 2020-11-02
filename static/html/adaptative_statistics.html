@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+</head>
+<body>
+
+{% if not existing_user %}
+<div id = "form">
+<input type="text" placeholder="username..." id="uname_input"></input>
+<input type="number" step="0.001" id="Disruptor" min="0" max="1">
+<input type="number" step="0.001" id="Free Spirit" min="0" max="1">
+<input type="number" step="0.001" id="Achiever" min="0" max="1">
+<input type="number" step="0.001" id="Player" min="0" max="1">
+<input type="number" step="0.001" id="Socializer" min="0" max="1">
+<input type="number" step="0.001" id="Philantropist" min="0" max="1">
+<input type="number" step="0.001" id="No Player" min="0" max="1">
+<button onclick="create_user()">Create User</button>
+</div>
+{% else %}
+<div id="existing"><param id="uname_input" value="{{user}}"></input></div>
+{% endif %}
+<hr>
+	<div id='myDiv'></div>
+
+  <button onclick="startBot()">Start Bot</button>
+
+<script>
+
+
+
+var count = 0;
+var colors = ['red', 'green', 'blue','purple','pink','orange','gray'];
+var traces = ['Disruptor', 'Free Spirit', 'Achiever','Player','Socializer','Philantropist', 'No Player'];
+var functions = [
+  function(x){return Math.sin(x/(2*Math.PI))},
+  function(x){return Math.sin(x/(Math.PI))},
+  function(x){return Math.sin(3*x/(2*Math.PI))},
+  function(x){return Math.sin(7*x/(2*Math.PI))},
+  function(x){return Math.sin(11*x/(Math.PI))},
+  function(x){return Math.sin(13*x/(2*Math.PI))},
+  function(x){return Math.sin(5*x/(2*Math.PI))},
+]
+
+var data = [];
+
+function adjustValue(idx,value_x,value_y) {
+
+    data[idx]['x'].unshift(value_x); 
+    data[idx]['y'].unshift(value_y); 
+    Plotly.redraw('myDiv');
+}
+
+function startBot(){
+    window.open("http://127.0.0.1:8080/api/g_mechanics/22/preview?user="+document.getElementById("uname_input").value,"","width=600,height=600");
+}
+
+function init_statistics(){
+  //alert(document.getElementById("uname_input").value);
+
+  for (var i = 0; i < traces.length;i++){
+    //alert(traces[i]);
+    
+    {% if not existing_user %}
+    data.push({
+        x: [0], // in reality I have more values... 
+        y: [document.getElementById(traces[i]).value], 
+        type: 'scatter',
+        name: traces[i],
+        line: {
+          color: colors[i],
+        },
+    });
+    {% else %}
+    data.push({
+        x: [0], // in reality I have more values... 
+        y: [], 
+        type: 'scatter',
+        name: traces[i],
+        line: {
+          color: colors[i],
+        },
+    });
+    {% endif %}
+  }
+  Plotly.newPlot('myDiv', data);
+  var timer = setInterval(function() {
+    count++;
+    var new_values = [];
+    fetch('http://127.0.0.1:8080/api/gamers/'+ document.getElementById("uname_input").value + "/")
+    .then(response => response.json())
+    .then(function(data){
+      new_values.push(data.gamer_profile.disruptor);
+      new_values.push(data.gamer_profile.free_spirit);
+      new_values.push(data.gamer_profile.achiever);
+      new_values.push(data.gamer_profile.player);
+      new_values.push(data.gamer_profile.socializer);
+      new_values.push(data.gamer_profile.philantropist);
+      new_values.push(data.gamer_profile.no_player);
+      for (var i = 0; i < traces.length;i++){
+        adjustValue(i,count,new_values[i]);
+      } 
+    });
+    
+  }, 10000, "JavaScript");
+}
+
+{% if not existing_user %}
+traces.forEach(function(item,index){
+  document.getElementById(item).onblur = function(){
+    if(document.getElementById(item).value < 0){
+      document.getElementById(item).value = 0;
+    }
+    if(document.getElementById(item).value > 1){
+      document.getElementById(item).value = 1;
+    }
+  }
+});
+{% else %}
+
+init_statistics();
+
+{% endif %}
+
+function create_user(){
+    // POST request using fetch() 
+  fetch("http://127.0.0.1:8080/api/gamers/", { 
+        
+      // Adding method type 
+      method: "POST", 
+        
+      // Adding body or contents to send 
+      body: JSON.stringify({
+        user: {
+            username: document.getElementById("uname_input").value,
+            email: ""
+        },
+        social_profile: {
+            image: "art",
+            description: "Description...",
+            data: {}
+        },
+        gamer_profile: {
+            disruptor: document.getElementById("Disruptor").value,
+            free_spirit: document.getElementById("Free Spirit").value,
+            achiever: document.getElementById("Achiever").value,
+            player: document.getElementById("Player").value,
+            socializer: document.getElementById("Socializer").value,
+            philantropist: document.getElementById("Philantropist").value,
+            no_player: document.getElementById("No Player").value,
+            data: {}
+        },
+        emotion_profile: {
+            valence: 0,
+            arousal: 0
+        }
+    }), 
+        
+      // Adding headers to the request 
+      headers: { 
+          "Content-type": "application/json; charset=UTF-8"
+      } 
+  }) 
+    
+  // Converting to JSON 
+  .then(response => response.json()) 
+    
+  // Displaying results to console 
+  .then(json => console.log(json))
+  .then(function(){
+    init_statistics();
+  }); 
+
+}
+</script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 
-<div>
+<div id="main-content-adapt">
 
   	<div id="incr"></div>
   	<div id="incr5"></div>
@@ -7,18 +7,26 @@
 </div>
 
 <script>
-            fetch("called_mechanic_url")
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (myJson) {
-                    
-                    document.querySelector("#incr").innerHTML = (myJson.html);
-                    $(myJson.html).appendTo(document.body);
-                    
-                })
-                .catch(function (error) {
-                    console.log("Error: " + error);
-                });
+
+
+include_interaction_testing_tools
+var main_content_name = "main-content-adapt";
+var interactable_elements = document.getElementById(main_content_name).querySelectorAll("*");
+init_auto_interactions(interactable_elements);
+startBot(main_content_name);
+
+fetch("called_mechanic_url")
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (myJson) {
+        
+        document.querySelector("#incr").innerHTML = (myJson.html);
+        $(myJson.html).appendTo(document.body);
+        
+    })
+    .catch(function (error) {
+        console.log("Error: " + error);
+    });
     			
 </script>

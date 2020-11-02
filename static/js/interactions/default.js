@@ -3,6 +3,8 @@ try {
 } catch (err) {
     var log = { "history": [], "main_time": 0, "focus_time": 0, "interaction_time": 0, "hidden_content_time": 0, "shown_content_time": 0 };
 
+    include_interaction_testing_tools
+
     //Main Time
     var tmp_main_t = 0;
     var main_timer;

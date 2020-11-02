@@ -177,25 +177,25 @@ document.getElementById("scrollable-users").innerHTML = ' <div id="scrollable-co
                                                   '<hr>'+
                                               '</div><div style="text-align:center" id ="loading-gif"><img src="https://i.pinimg.com/originals/23/35/32/23353292cc60b2bcb3f015ee362eeb74.gif"  width=250/></div></div>';
 document.getElementById("item5").innerHTML = '<button class="block-submit" onclick="sendGifts()">Send Gifts</button>';
-document.getElementById("gift-input-instance").onfocusin = function(){
+document.getElementById("gift-input-instance").onfocus = function(){
    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-in interaction
     log_input({itime: 2,message:"Input field 'Amount' focused in", register : log, level:1,type:"InputIn"});
     // --------------------------------------------------------------------------
 }
-document.getElementById("gift-input-instance").onfocusout = function(){
+document.getElementById("gift-input-instance").onblur = function(){
    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-in interaction
     log_input({itime: 2,message:"Input field 'Amount' focused out", register : log, level:1,type:"InputOut"});
     // --------------------------------------------------------------------------
 }
-document.getElementById("gift-options").onfocusin = function(){
+document.getElementById("gift-options").onfocus = function(){
    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-in interaction
     log_input({itime: 2,message:"Input field 'Type of Gift' focused in", register : log, level:1,type:"InputIn"});
     // --------------------------------------------------------------------------
 }
-document.getElementById("gift-options").onfocusout = function(){
+document.getElementById("gift-options").onblur = function(){
    // INTERACTION OCCURRENCE REGISTRATION --------------------------------------
     //Logging :: input-in interaction
     log_input({itime: 2,message:"Input field 'Type of Gift' focused out", register : log, level:1,type:"InputOut"});
