@@ -1,0 +1,15 @@
+asgiref==3.2.10
+Django==3.0.8
+django-cors-headers==3.4.0
+django-enumchoicefield==2.0.0
+django-enumfields==2.0.0
+django-filter==2.3.0
+django-tinymce==3.0.2
+djangorestframework==3.11.0
+drf-enum-field==0.9.3
+jsonfield==3.1.0
+numpy==1.19.0
+Pillow==7.2.0
+pytz==2020.1
+sqlparse==0.3.1
+gunicorn==20.0.4
